@@ -4,19 +4,20 @@ const registerOPD = async(req,res)=>{
     try {
         const newOPD = await OPD.insertOne(req.body);
 
-        res.status(201).json(newOPD)
+        return res.status(201).json(newOPD)
     } catch (error) {
-        res.status(400).error({error:error.message});
+        return res.status(400).error({error:error.message});
     }
 }
 
 const getOPDById = async(req,res)=>{
     try {
+        console.log(req.params.id)
         const OPDs = await OPD.find({OPDID:req.params.id});
 
-        res.status(201).json(OPDs)
+        return res.status(201).json(OPDs)
     } catch (error) {
-        res.status(400).error({error:error.message});
+        return res.status(400).error({error:error.message});
     }
 }
 

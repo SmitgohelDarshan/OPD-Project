@@ -465,8 +465,6 @@ const OPDMaster = () => {
                 <th className="px-6 py-4">OPD Details</th>
                 <th className="px-6 py-4">Patient Name</th>
                 <th className="px-6 py-4">Case Type</th>
-                <th className="px-6 py-4">Treated By</th>
-                <th className="px-6 py-4">Reg. Fee</th>
                 <th className="px-6 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -535,7 +533,7 @@ const OPDMaster = () => {
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         
                         {/* VIEW ACTION */}
-                        <Link to={`/admin/getOPD/${item.OLDOPDNo}`}>
+                        <Link to={`/admin/getOPD/${item.OPDID}`}>
                           <button className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded transition-all duration-300 hover:scale-110 active:scale-95" title="View Details">
                             <Eye className="w-4 h-4" />
                           </button>

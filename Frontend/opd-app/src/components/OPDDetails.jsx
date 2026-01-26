@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
@@ -16,28 +16,34 @@ import {
   XCircle
 } from 'lucide-react';
 
-const OPDDetails = () => {
+const OPDDetails =  () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
   const { id } = useParams();
 
   // --- Mock Data (Replace with API call using id) ---
-  const opdData = {
-    OPDID: id || 1,
-    OPDNo: "OPD-2024-1001",
-    OPDDateTime: "2026-01-02T10:30:00",
-    PatientID: 5001,
-    PatientName: "Rahul Verma",
-    IsFollowUpCase: true,
-    TreatedByDoctorID: 201,
-    TreatedByDoctorName: "Dr. Arjun Mehta",
-    RegistrationFee: 500.00,
-    Description: "Patient reports high fever (102F) and chills since last night.",
-    OLDOPDNo: "LEG-9901",
-    UserID: 10,
-    Created: "2024-10-15T09:00:00",
-    Modified: "2024-10-15T09:00:00"
+  const [opdData,setOpdData] = useState([]);
+
+// console.log(id)
+//   useEffect(()=>{
+//     fetch('http://localhost:3000/api/opds/1')
+//     .then(res=>res.json())
+//     .then(json=>{setOpdData(json);console.log(opdData);})
+//   },[])
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/opds/${id}`);
+      const data = await response.json();
+      setOpdData(data[0]);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
   };
+  fetchData();
+}, [id]);
+ 
 
   // Helper to format dates
   const formatDate = (isoString) => {
@@ -48,11 +54,22 @@ const OPDDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
-    if(window.confirm("Are you sure you want to delete this OPD record?")) {
+  const handleDelete = async(id) => {
+ 
+    if(confirm("Are you sure you want to delete this OPD record?")) {
       try {
         // TODO: Replace with actual API call
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/opds/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        if (!req==201) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`OPD deleted with ${id}`);
         navigate('/admin/getAllOPDs');
       } catch (error) {
         console.error('Error deleting OPD:', error);
@@ -101,11 +118,11 @@ const OPDDetails = () => {
                   <div className="flex items-center gap-4 text-slate-500 mt-1">
                     <div className="flex items-center gap-1">
                       <User className="w-4 h-4" />
-                      <span>{opdData.PatientName}</span>
+                      <span>{opdData.PatientID}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Stethoscope className="w-4 h-4" />
-                      <span>{opdData.TreatedByDoctorName}</span>
+                      <span>{opdData.TreatedByDoctorID}</span>
                     </div>
                   </div>
                 </div>
@@ -120,7 +137,7 @@ const OPDDetails = () => {
                   </span>
                   <div className="flex items-center gap-1 text-xl font-bold text-indigo-600">
                     <IndianRupee className="w-4 h-4" />
-                    {opdData.RegistrationFee.toFixed(2)}
+                    {opdData.RegistrationCharge}
                   </div>
                 </div>
               </div>
@@ -146,12 +163,12 @@ const OPDDetails = () => {
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Patient ID</p>
                  <p className="text-lg font-mono font-bold text-slate-700 mt-1">#{opdData.PatientID}</p>
-                 <p className="text-sm text-slate-500 mt-1">{opdData.PatientName}</p>
+                 {/* <p className="text-sm text-slate-500 mt-1">{opdData.PatientName}</p> */}
                </div>
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Treated By Doctor ID</p>
                  <p className="text-lg font-mono font-bold text-slate-700 mt-1">#{opdData.TreatedByDoctorID}</p>
-                 <p className="text-sm text-slate-500 mt-1">{opdData.TreatedByDoctorName}</p>
+                 {/* <p className="text-sm text-slate-500 mt-1">{opdData.TreatedByDoctorName}</p> */}
                </div>
                {opdData.OLDOPDNo && (
                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
@@ -189,7 +206,7 @@ const OPDDetails = () => {
 
               <div className="flex justify-between items-center py-2 border-b border-gray-50">
                 <span className="text-xs text-slate-500">Registration Fee</span>
-                <span className="text-sm font-bold text-indigo-600">₹{opdData.RegistrationFee.toFixed(2)}</span>
+                <span className="text-sm font-bold text-indigo-600">₹{opdData.RegistrationCharge}</span>
               </div>
 
               <div className="flex justify-between items-center py-2 border-b border-gray-50">
@@ -220,14 +237,14 @@ const OPDDetails = () => {
              <h4 className="text-sm font-bold text-indigo-900 mb-3">Actions</h4>
              <div className="space-y-2">
                 <button 
-                  onClick={() => navigate(`/admin/editOPD/${opdData.OPDID}`)}
+                  // onClick={() => navigate(`/admin/editOPD/${opdData.OPDID}`)}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-indigo-600 text-sm font-medium rounded-lg border border-indigo-200 hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Edit className="w-4 h-4" />
                   Edit OPD Record
                 </button>
                 <button 
-                  onClick={handleDelete}
+                  onClick={()=>{handleDelete(id)}}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Trash2 className="w-4 h-4" />
