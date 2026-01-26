@@ -341,6 +341,7 @@ import {
   IndianRupee,
   RefreshCw // For Follow-up icon
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 const OPDMaster = () => {
   // --- Context for Sidebar Transition ---
@@ -350,48 +351,57 @@ const OPDMaster = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Initial Data (Mapped to your specific field names)
-  const [opdList, setOpdList] = useState([
-    {
-      OPDNo: "OPD-2025-1001",
-      OPDDateTime: "2025-01-12 10:30 AM",
-      PatientName: "Rahul Verma",
-      IsFollowUpCase: false, // New Case
-      TreatedByDoctorName: "Dr. Arjun Mehta",
-      RegistrationFee: 500
-    },
-    {
-      OPDNo: "OPD-2025-1002",
-      OPDDateTime: "2025-01-12 11:15 AM",
-      PatientName: "Sita Devi",
-      IsFollowUpCase: true, // Follow Up
-      TreatedByDoctorName: "Dr. Priya Sharma",
-      RegistrationFee: 200
-    },
-    {
-      OPDNo: "OPD-2025-1003",
-      OPDDateTime: "2025-01-12 12:00 PM",
-      PatientName: "Amit Patel",
-      IsFollowUpCase: false,
-      TreatedByDoctorName: "Dr. Rajesh Gupta",
-      RegistrationFee: 500
-    },
-    {
-      OPDNo: "OPD-2025-1004",
-      OPDDateTime: "2025-01-13 09:45 AM",
-      PatientName: "Vikram Singh",
-      IsFollowUpCase: true,
-      TreatedByDoctorName: "Dr. Arjun Mehta",
-      RegistrationFee: 0
-    },
-    {
-      OPDNo: "OPD-2025-1005",
-      OPDDateTime: "2025-01-13 10:00 AM",
-      PatientName: "Anjali Rao",
-      IsFollowUpCase: false,
-      TreatedByDoctorName: "Dr. Anita Desai",
-      RegistrationFee: 800
-    }
-  ]);
+  // const [opdList, setOpdList] = useState([
+  //   {
+  //     OPDNo: "OPD-2025-1001",
+  //     OPDDateTime: "2025-01-12 10:30 AM",
+  //     PatientName: "Rahul Verma",
+  //     IsFollowUpCase: false, // New Case
+  //     TreatedByDoctorName: "Dr. Arjun Mehta",
+  //     RegistrationFee: 500
+  //   },
+  //   {
+  //     OPDNo: "OPD-2025-1002",
+  //     OPDDateTime: "2025-01-12 11:15 AM",
+  //     PatientName: "Sita Devi",
+  //     IsFollowUpCase: true, // Follow Up
+  //     TreatedByDoctorName: "Dr. Priya Sharma",
+  //     RegistrationFee: 200
+  //   },
+  //   {
+  //     OPDNo: "OPD-2025-1003",
+  //     OPDDateTime: "2025-01-12 12:00 PM",
+  //     PatientName: "Amit Patel",
+  //     IsFollowUpCase: false,
+  //     TreatedByDoctorName: "Dr. Rajesh Gupta",
+  //     RegistrationFee: 500
+  //   },
+  //   {
+  //     OPDNo: "OPD-2025-1004",
+  //     OPDDateTime: "2025-01-13 09:45 AM",
+  //     PatientName: "Vikram Singh",
+  //     IsFollowUpCase: true,
+  //     TreatedByDoctorName: "Dr. Arjun Mehta",
+  //     RegistrationFee: 0
+  //   },
+  //   {
+  //     OPDNo: "OPD-2025-1005",
+  //     OPDDateTime: "2025-01-13 10:00 AM",
+  //     PatientName: "Anjali Rao",
+  //     IsFollowUpCase: false,
+  //     TreatedByDoctorName: "Dr. Anita Desai",
+  //     RegistrationFee: 800
+  //   }
+  // ]);
+  const [opdList, setOpdList] = useState([])
+  
+  useEffect(
+      ()=>{
+        fetch("http://localhost:3000/api/opds/")
+        .then((res)=>res.json())
+        .then((json)=>{console.log(json);setOpdList(json)})
+      }
+    ,[])
 
   // --- Handlers ---
   const handleDelete = (opdNo) => {
@@ -400,7 +410,6 @@ const OPDMaster = () => {
 
   // Filter by Patient Name or OPD No
   const filteredOPD = opdList.filter(item => 
-    item.PatientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.OPDNo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -483,12 +492,12 @@ const OPDMaster = () => {
                     </td>
 
                     {/* Patient Name Column */}
-                    <td className="px-6 py-4">
+                    {/* <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-slate-900 font-medium">
                         <User className="w-4 h-4 text-slate-400" />
                         {item.PatientName}
                       </div>
-                    </td>
+                    </td> */}
 
                     {/* IsFollowUpCase Column */}
                     <td className="px-6 py-4">
@@ -506,18 +515,18 @@ const OPDMaster = () => {
                     </td>
 
                     {/* Treated By Doctor Column */}
-                    <td className="px-6 py-4">
+                    {/* <td className="px-6 py-4">
                        <div className="flex items-center gap-2 text-slate-600">
                          <Stethoscope className="w-4 h-4 text-slate-400" />
                          {item.TreatedByDoctorName}
                        </div>
-                    </td>
+                    </td> */}
 
                     {/* Registration Fee Column */}
                     <td className="px-6 py-4">
                         <div className="flex items-center gap-1 font-bold text-slate-800">
                             <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
-                            {item.RegistrationFee}
+                            {item.RegistrationCharge}
                         </div>
                     </td>
 
@@ -526,7 +535,7 @@ const OPDMaster = () => {
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         
                         {/* VIEW ACTION */}
-                        <Link to={`/admin/getOPD/${item.OPDNo}`}>
+                        <Link to={`/admin/getOPD/${item.OLDOPDNo}`}>
                           <button className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded transition-all duration-300 hover:scale-110 active:scale-95" title="View Details">
                             <Eye className="w-4 h-4" />
                           </button>
@@ -539,7 +548,8 @@ const OPDMaster = () => {
               ) : (
                 <tr>
                   <td colSpan="6" className="px-6 py-8 text-center text-slate-400">
-                    No OPD records found matching "{searchTerm}"
+                    {/* No OPD records found matching "{searchTerm}" */}
+                    No OPD records found matching 2
                   </td>
                 </tr>
               )}

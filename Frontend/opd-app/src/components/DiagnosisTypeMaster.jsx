@@ -76,6 +76,7 @@ import {
   Building2,
   FileText
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 const DiagnosisTypeMaster = () => {
   // --- Context for Sidebar Transition ---

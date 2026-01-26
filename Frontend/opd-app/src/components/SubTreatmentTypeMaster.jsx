@@ -299,6 +299,7 @@ import {
   IndianRupee, // For Rate
   Layers
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 const SubTreatmentTypeMaster = () => {
   // --- Context for Sidebar Transition ---
@@ -308,43 +309,51 @@ const SubTreatmentTypeMaster = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Initial Data (Mapped to your DB Schema)
-  const [subTreatmentList, setSubTreatmentList] = useState([
-    {
-      SubTreatmentTypeID: 1,
-      SubTreatmentTypeName: "Root Canal - Anterior",
-      TreatmentTypeName: "Root Canal Treatment",
-      Rate: 3500,
-      IsActive: true
-    },
-    {
-      SubTreatmentTypeID: 2,
-      SubTreatmentTypeName: "Root Canal - Molar",
-      TreatmentTypeName: "Root Canal Treatment",
-      Rate: 5000,
-      IsActive: true
-    },
-    {
-      SubTreatmentTypeID: 3,
-      SubTreatmentTypeName: "MRI Brain (Contrast)",
-      TreatmentTypeName: "MRI Scan (Full Body)",
-      Rate: 8500,
-      IsActive: true
-    },
-    {
-      SubTreatmentTypeID: 4,
-      SubTreatmentTypeName: "Follow-up Consultation",
-      TreatmentTypeName: "General Consultation",
-      Rate: 300,
-      IsActive: true
-    },
-    {
-      SubTreatmentTypeID: 5,
-      SubTreatmentTypeName: "Laser Cataract Surgery",
-      TreatmentTypeName: "Cataract Surgery",
-      Rate: 35000,
-      IsActive: false
-    }
-  ]);
+  // const [subTreatmentList, setSubTreatmentList] = useState([
+  //   {
+  //     SubTreatmentTypeID: 1,
+  //     SubTreatmentTypeName: "Root Canal - Anterior",
+  //     TreatmentTypeName: "Root Canal Treatment",
+  //     Rate: 3500,
+  //     IsActive: true
+  //   },
+  //   {
+  //     SubTreatmentTypeID: 2,
+  //     SubTreatmentTypeName: "Root Canal - Molar",
+  //     TreatmentTypeName: "Root Canal Treatment",
+  //     Rate: 5000,
+  //     IsActive: true
+  //   },
+  //   {
+  //     SubTreatmentTypeID: 3,
+  //     SubTreatmentTypeName: "MRI Brain (Contrast)",
+  //     TreatmentTypeName: "MRI Scan (Full Body)",
+  //     Rate: 8500,
+  //     IsActive: true
+  //   },
+  //   {
+  //     SubTreatmentTypeID: 4,
+  //     SubTreatmentTypeName: "Follow-up Consultation",
+  //     TreatmentTypeName: "General Consultation",
+  //     Rate: 300,
+  //     IsActive: true
+  //   },
+  //   {
+  //     SubTreatmentTypeID: 5,
+  //     SubTreatmentTypeName: "Laser Cataract Surgery",
+  //     TreatmentTypeName: "Cataract Surgery",
+  //     Rate: 35000,
+  //     IsActive: false
+  //   }
+  // ]);
+  const [subTreatmentList, setSubTreatmentList] = useState([])
+  useEffect(
+        ()=>{
+          fetch("http://localhost:3000/api/subtreatments/")
+          .then((res)=>res.json())
+          .then((json)=>setSubTreatmentList(json))
+        }
+      ,[])
 
   // --- Handlers ---
   const handleDelete = (id) => {

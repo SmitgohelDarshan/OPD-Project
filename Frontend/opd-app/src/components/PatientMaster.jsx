@@ -344,6 +344,7 @@ import {
   Calendar // For Age
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const PatientMaster = () => {
   // --- Context for Sidebar Transition ---
@@ -353,53 +354,63 @@ const PatientMaster = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Initial Data (Mapped to your specific field names)
-  const [patientList, setPatientList] = useState([
-    {
-      PatientID: 1001,
-      PatientName: "Rahul Verma",
-      Age: 34,
-      BloodGroup: "O+",
-      Gender: "Male",
-      HospitalName: "City Care General Hospital",
-      MobileNo: "9876543210"
-    },
-    {
-      PatientID: 1002,
-      PatientName: "Priya Das",
-      Age: 28,
-      BloodGroup: "A-",
-      Gender: "Female",
-      HospitalName: "Sunrise Multispeciality",
-      MobileNo: "9988776655"
-    },
-    {
-      PatientID: 1003,
-      PatientName: "Amit Patel",
-      Age: 45,
-      BloodGroup: "B+",
-      Gender: "Male",
-      HospitalName: "Sterling Hospital",
-      MobileNo: "8877665544"
-    },
-    {
-      PatientID: 1004,
-      PatientName: "Sita Devi",
-      Age: 62,
-      BloodGroup: "AB+",
-      Gender: "Female",
-      HospitalName: "City Care General Hospital",
-      MobileNo: "7766554433"
-    },
-    {
-      PatientID: 1005,
-      PatientName: "Vikram Singh",
-      Age: 12,
-      BloodGroup: "O-",
-      Gender: "Male",
-      HospitalName: "Apex Heart Institute",
-      MobileNo: "9123456789"
-    }
-  ]);
+  // const [patientList, setPatientList] = useState([
+  //   {
+  //     PatientID: 1001,
+  //     PatientName: "Rahul Verma",
+  //     Age: 34,
+  //     BloodGroup: "O+",
+  //     Gender: "Male",
+  //     HospitalName: "City Care General Hospital",
+  //     MobileNo: "9876543210"
+  //   },
+  //   {
+  //     PatientID: 1002,
+  //     PatientName: "Priya Das",
+  //     Age: 28,
+  //     BloodGroup: "A-",
+  //     Gender: "Female",
+  //     HospitalName: "Sunrise Multispeciality",
+  //     MobileNo: "9988776655"
+  //   },
+  //   {
+  //     PatientID: 1003,
+  //     PatientName: "Amit Patel",
+  //     Age: 45,
+  //     BloodGroup: "B+",
+  //     Gender: "Male",
+  //     HospitalName: "Sterling Hospital",
+  //     MobileNo: "8877665544"
+  //   },
+  //   {
+  //     PatientID: 1004,
+  //     PatientName: "Sita Devi",
+  //     Age: 62,
+  //     BloodGroup: "AB+",
+  //     Gender: "Female",
+  //     HospitalName: "City Care General Hospital",
+  //     MobileNo: "7766554433"
+  //   },
+  //   {
+  //     PatientID: 1005,
+  //     PatientName: "Vikram Singh",
+  //     Age: 12,
+  //     BloodGroup: "O-",
+  //     Gender: "Male",
+  //     HospitalName: "Apex Heart Institute",
+  //     MobileNo: "9123456789"
+  //   }
+  // ]);
+  const [patientList, setPatientList] = useState([])
+
+  useEffect(
+        ()=>{
+          fetch("http://localhost:3000/api/patients/")
+          .then((res)=>res.json())
+          .then((json)=>setPatientList(json))
+        }
+      ,[])
+
 
   // --- Handlers ---
   const handleDelete = async (id) => {

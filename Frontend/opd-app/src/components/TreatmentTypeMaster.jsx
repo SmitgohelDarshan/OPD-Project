@@ -276,6 +276,7 @@ import {
   FileText, 
   Building2
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 const TreatmentTypeMaster = () => {
   // --- Context for Sidebar Transition ---
@@ -285,38 +286,46 @@ const TreatmentTypeMaster = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Initial Data (Updated to your specific field names)
-  const [treatmentList, setTreatmentList] = useState([
-    {
-      TreatmentTypeID: 1,
-      TreatmentTypeName: "General Consultation",
-      TreatmentTypeShortName: "OPD-GEN",
-      HospitalName: "City Care General Hospital"
-    },
-    {
-      TreatmentTypeID: 2,
-      TreatmentTypeName: "Root Canal Treatment",
-      TreatmentTypeShortName: "DEN-RCT",
-      HospitalName: "Sunrise Multispeciality"
-    },
-    {
-      TreatmentTypeID: 3,
-      TreatmentTypeName: "MRI Scan (Full Body)",
-      TreatmentTypeShortName: "RAD-MRI",
-      HospitalName: "Sterling Hospital"
-    },
-    {
-      TreatmentTypeID: 4,
-      TreatmentTypeName: "Cataract Surgery",
-      TreatmentTypeShortName: "OPH-CAT",
-      HospitalName: "Lotus Eye Care"
-    },
-    {
-      TreatmentTypeID: 5,
-      TreatmentTypeName: "Physiotherapy Session",
-      TreatmentTypeShortName: "PHY-SES",
-      HospitalName: "City Care General Hospital"
-    }
-  ]);
+  // const [treatmentList, setTreatmentList] = useState([
+  //   {
+  //     TreatmentTypeID: 1,
+  //     TreatmentTypeName: "General Consultation",
+  //     TreatmentTypeShortName: "OPD-GEN",
+  //     HospitalName: "City Care General Hospital"
+  //   },
+  //   {
+  //     TreatmentTypeID: 2,
+  //     TreatmentTypeName: "Root Canal Treatment",
+  //     TreatmentTypeShortName: "DEN-RCT",
+  //     HospitalName: "Sunrise Multispeciality"
+  //   },
+  //   {
+  //     TreatmentTypeID: 3,
+  //     TreatmentTypeName: "MRI Scan (Full Body)",
+  //     TreatmentTypeShortName: "RAD-MRI",
+  //     HospitalName: "Sterling Hospital"
+  //   },
+  //   {
+  //     TreatmentTypeID: 4,
+  //     TreatmentTypeName: "Cataract Surgery",
+  //     TreatmentTypeShortName: "OPH-CAT",
+  //     HospitalName: "Lotus Eye Care"
+  //   },
+  //   {
+  //     TreatmentTypeID: 5,
+  //     TreatmentTypeName: "Physiotherapy Session",
+  //     TreatmentTypeShortName: "PHY-SES",
+  //     HospitalName: "City Care General Hospital"
+  //   }
+  // ]);
+  const [treatmentList, setTreatmentList] = useState([])
+    useEffect(
+          ()=>{
+            fetch("http://localhost:3000/api/treatments/")
+            .then((res)=>res.json())
+            .then((json)=>setTreatmentList(json))
+          }
+    ,[])
 
   // --- Handlers ---
   const handleDelete = (id) => {

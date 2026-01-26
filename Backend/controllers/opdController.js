@@ -22,29 +22,31 @@ const getOPDById = async(req,res)=>{
 
 const getAllOPDs = async(req,res)=>{
     try {
-        const OPD = await OPD.find({});
-
-        res.status(201).json(OPD)
+        const opds = await OPD.find({});
+        
+        return res.status(201).json(opds)
     } catch (error) {
-        res.status(400).error({error:error.message});
+        console.log(error)
+        return res.status(400).json({error:error.message});
     }
 }
 
 const updateOPD = async(req,res)=>{
     try {
-        const OPP = await OPD.findOneAndUpdate({OPDID:req.params.id}, req.body);
+        const opd = await OPD.findOneAndUpdate({OPDID:req.params.id}, req.body);
+        return res.status(201).json(opd)
     } catch (error) {
-        res.status(400).error({error:error.message});
+        return res.status(400).error({error:error.message});
     }
 }
 
 const deleteOPD = async(req,res)=>{
     try {
-        const OPD = await OPD.findOneAndDelete({OPDID:req.params.id});
+        const opd = await OPD.findOneAndDelete({OPDID:req.params.id});
 
-        res.status(201).json(OPD)
+        return res.status(201).json(opd)
     } catch (error) {
-        res.status(400).error({error:error.message});        
+        return res.status(400).error({error:error.message});        
     }
 }
 
