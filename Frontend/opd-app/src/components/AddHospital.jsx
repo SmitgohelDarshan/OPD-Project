@@ -20,22 +20,7 @@ const AddHospital = () => {
   const navigate = useNavigate();
 
   // --- Form State aligned with HospitalSchema ---
-  const [formData, setFormData] = useState({
-    HospitalName: '',
-    DefaultPaymentModeID: '',
-    RegistrationCharge: '',
-    RegistrationValidityMonths: '',
-    OpeningDate: new Date().toISOString().split('T')[0],
-    OpeningPatientNo: '',
-    OpeningOPDNo: '',
-    OpeningReceiptNo: '',
-    Description: '',
-    UserID: 1, // Example logged-in user
-    Address: '',
-    IsRateEnableInReceipt: false,
-    IsRegistrationFeeEnableInOPD: true,
-    ImageURL: ''
-  });
+  const [formData, setFormData] = useState({});
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -62,36 +47,65 @@ const AddHospital = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log("Submitting to MongoDB Schema:", formData);
-      // Example API call:
-      const response=await fetch('http://localhost:3000/api/hospitals/register',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify(formData)
-      })
+    if (id) {
+      try {
+        const { Created, Modified, HospitalID, _id, ...updateData } = formData;
+        console.log("Submitting to MongoDB Schema:", updateData);
+        // Example API call:
 
-      const result=await response.json();
-      console.log(result)
-      if(response.status==201)
-      {
-        alert(`Hospital added with id ${result.HospitalID}`)
-        navigate('/admin/getAllHospitals');
+        const response = await fetch(
+          "http://localhost:3000/api/hospitals/update/" + id,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`Hospital edited with id ${result.HospitalID}`);
+          navigate("/admin/getHospital/" + id);
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error editing hospital:", error);
+        alert("Failed to save hospital. Please check schema constraints.");
       }
-      else
-      {
-        alert(`Error:${result.message}`)
+    } else {
+      try {
+        console.log("Submitting to MongoDB Schema:", formData);
+        // Example API call:
+        const response = await fetch(
+          "http://localhost:3000/api/hospitals/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`Hospital added with id ${result.HospitalID}`);
+          navigate("/admin/getAllHospitals");
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error saving hospital:", error);
+        alert("Failed to save hospital. Please check schema constraints.");
       }
-      
-    } catch (error) {
-      console.error('Error saving hospital:', error);
-      alert('Failed to save hospital. Please check schema constraints.');
     }
   };
-
-  const handleCancel = () => navigate('/admin/getAllHospitals');
+  const handleCancel = () =>{ if(id){navigate('/admin/getHospital/'+id)}else{navigate('/admin/getAllHospitals')}};
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>

@@ -99,7 +99,7 @@
 
 
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Building2, 
@@ -117,30 +117,73 @@ import {
   ShieldCheck,
   User
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 function HospitalDetails() {
   const { expanded } = useContext(SidebarContext);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  // --- Mock Data (Extracted from your table) ---
-  const hospitalData = {
-    HospitalID: 1,
-    HospitalName: "Civil Hospital",
-    DefaultPaymentModeID: 1,
-    RegistrationCharge: 500,
-    RegistrationValidityMonths: 6,
-    OpeningDate: "2025-12-30",
-    OpeningPatientNo: 5001,
-    OpeningOPDNo: 51,
-    OpeningReceiptNo: 501,
-    Description: "The Civil Hospital is a prominent, state-run multi-specialty medical facility serving as the backbone of public healthcare for the region. Dedicated to providing affordable and accessible medical services to all socio-economic groups, it operates as a 24/7 tertiary care center.",
-    UserID: 1,
-    Created: "2025-12-30",
-    Modified: "2025-12-30",
-    Address: "Junagadh",
-    IsRateEnableInReceipt: true,
-    IsRegistrationFeeEnableInOPD: true
+
+
+  const [hospitalData,setHospitalData] = useState([]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/hospitals/${id}`);
+      const data = await response.json();
+      setHospitalData(data[0]);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
   };
+  fetchData();
+}, [id]);
+
+
+const handleDelete = async(id) => {
+ 
+    if(confirm("Are you sure you want to delete this Hospital record?")) {
+      try {
+        // TODO: Replace with actual API call
+        // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/hospitals/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        if (!req==201) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`Hospital deleted with ${id}`);
+        navigate('/admin/getAllHospitals');
+      } catch (error) {
+        console.error('Error deleting Hospital:', error);
+        alert('Failed to delete Hospital record. Please try again.');
+      }
+    }
+  };
+  // --- Mock Data (Extracted from your table) ---
+  // const hospitalData = {
+  //   HospitalID: 1,
+  //   HospitalName: "Civil Hospital",
+  //   DefaultPaymentModeID: 1,
+  //   RegistrationCharge: 500,
+  //   RegistrationValidityMonths: 6,
+  //   OpeningDate: "2025-12-30",
+  //   OpeningPatientNo: 5001,
+  //   OpeningOPDNo: 51,
+  //   OpeningReceiptNo: 501,
+  //   Description: "The Civil Hospital is a prominent, state-run multi-specialty medical facility serving as the backbone of public healthcare for the region. Dedicated to providing affordable and accessible medical services to all socio-economic groups, it operates as a 24/7 tertiary care center.",
+  //   UserID: 1,
+  //   Created: "2025-12-30",
+  //   Modified: "2025-12-30",
+  //   Address: "Junagadh",
+  //   IsRateEnableInReceipt: true,
+  //   IsRegistrationFeeEnableInOPD: true
+  // };
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000`}>
@@ -167,11 +210,13 @@ function HospitalDetails() {
         {/* Action Buttons */}
         <div className="flex gap-3">
           
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+          <button onClick={() => navigate(`/admin/editHospital/${id}`)}
+           className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
             <Edit2 className="w-4 h-4" /> Edit
           </button>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 text-red-600 font-medium rounded-lg hover:bg-red-100 transition-colors shadow-sm">
+          <button onClick={()=>{handleDelete(id)}}
+          className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 text-red-600 font-medium rounded-lg hover:bg-red-100 transition-colors shadow-sm">
             <Trash2 className="w-4 h-4" /> Delete
           </button>
         </div>

@@ -21,15 +21,7 @@ const OPDDetails =  () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // --- Mock Data (Replace with API call using id) ---
   const [opdData,setOpdData] = useState([]);
-
-// console.log(id)
-//   useEffect(()=>{
-//     fetch('http://localhost:3000/api/opds/1')
-//     .then(res=>res.json())
-//     .then(json=>{setOpdData(json);console.log(opdData);})
-//   },[])
 
 useEffect(() => {
   const fetchData = async () => {
@@ -237,7 +229,7 @@ useEffect(() => {
              <h4 className="text-sm font-bold text-indigo-900 mb-3">Actions</h4>
              <div className="space-y-2">
                 <button 
-                  // onClick={() => navigate(`/admin/editOPD/${opdData.OPDID}`)}
+                  onClick={() => navigate(`/admin/editOPD/${opdData.OPDID}`)}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-indigo-600 text-sm font-medium rounded-lg border border-indigo-200 hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Edit className="w-4 h-4" />

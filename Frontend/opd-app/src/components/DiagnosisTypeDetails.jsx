@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
@@ -21,18 +21,33 @@ const DiagnosisTypeDetails = () => {
   const { id } = useParams();
 
   // --- Mock Data (Replace with API call using id) ---
-  const diagnosisData = {
-    DiagnosisTypeID: id || 1,
-    DiagnosisTypeName: "Acute Gastritis",
-    DiagnosisTypeShortName: "GAS-ACU",
-    HospitalID: 1,
-    HospitalName: "City Care General Hospital",
-    Description: "Inflammation of the stomach lining, typically causing pain, nausea, and vomiting.",
-    IsActive: true,
-    UserID: 1,
-    Created: "2024-01-15T09:30:00",
-    Modified: "2024-01-15T09:30:00"
-  };
+  // const diagnosisData = {
+  //   DiagnosisTypeID: id || 1,
+  //   DiagnosisTypeName: "Acute Gastritis",
+  //   DiagnosisTypeShortName: "GAS-ACU",
+  //   HospitalID: 1,
+  //   HospitalName: "City Care General Hospital",
+  //   Description: "Inflammation of the stomach lining, typically causing pain, nausea, and vomiting.",
+  //   IsActive: true,
+  //   UserID: 1,
+  //   Created: "2024-01-15T09:30:00",
+  //   Modified: "2024-01-15T09:30:00"
+  // };
+
+  const [diagnosisData,setDiagnosisData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/diagnosistypes/${id}`);
+        const data = await response.json();
+        setDiagnosisData(data[0]);
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   // Helper to format dates
   const formatDate = (isoString) => {
@@ -43,15 +58,27 @@ const DiagnosisTypeDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
-    if(window.confirm("Are you sure you want to delete this diagnosis type?")) {
+
+  const handleDelete = async(id) => {
+ 
+    if(confirm("Are you sure you want to delete this Diagnosis record?")) {
       try {
         // TODO: Replace with actual API call
-        // await fetch(`/api/diagnosis/${id}`, { method: 'DELETE' });
+        // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/diagnosistypes/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        if (!req==201) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`OPD deleted with ${id}`);
         navigate('/admin/getAllDiagnosisTypes');
       } catch (error) {
-        console.error('Error deleting diagnosis type:', error);
-        alert('Failed to delete diagnosis type. Please try again.');
+        console.error('Error deleting Diagnosis:', error);
+        alert('Failed to delete Diagnosis record. Please try again.');
       }
     }
   };

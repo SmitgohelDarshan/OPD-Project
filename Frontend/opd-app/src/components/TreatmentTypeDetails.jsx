@@ -13,6 +13,8 @@ import {
   Trash2,
   Hash
 } from 'lucide-react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const TreatmentTypeDetails = () => {
   const { expanded } = useContext(SidebarContext);
@@ -20,17 +22,20 @@ const TreatmentTypeDetails = () => {
   const { id } = useParams();
 
   // --- Mock Data (Replace with API call using id) ---
-  const treatmentData = {
-    TreatmentTypeID: id || 1,
-    TreatmentTypeName: "General Consultation",
-    TreatmentTypeShortName: "GEN-OPD",
-    HospitalID: 1001,
-    HospitalName: "City Care General Hospital",
-    Description: "Standard physician checkup and vitals assessment",
-    UserID: 501,
-    Created: "2025-10-15T09:30:00",
-    Modified: "2025-10-15T09:30:00"
-  };
+  const [treatmentData, setTreatmentData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/treatments/${id}`);
+        const data = await response.json();
+        setTreatmentData(data[0]);
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   // Helper to format dates
   const formatDate = (isoString) => {
@@ -41,15 +46,26 @@ const TreatmentTypeDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
-    if(window.confirm("Are you sure you want to delete this treatment type?")) {
+  const handleDelete = async(id) => {
+ 
+    if(confirm("Are you sure you want to delete this Treatment Type record?")) {
       try {
         // TODO: Replace with actual API call
-        // await fetch(`/api/treatments/${id}`, { method: 'DELETE' });
+        // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/treatments/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        if (!req==201) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`OPD deleted with ${id}`);
         navigate('/admin/getAllTreatments');
       } catch (error) {
-        console.error('Error deleting treatment type:', error);
-        alert('Failed to delete treatment type. Please try again.');
+        console.error('Error deleting Treatment Type:', error);
+        alert('Failed to delete Treatment Type record. Please try again.');
       }
     }
   };
@@ -122,7 +138,7 @@ const TreatmentTypeDetails = () => {
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Hospital ID</p>
                  <p className="text-lg font-mono font-bold text-slate-700 mt-1">#{treatmentData.HospitalID}</p>
-                 <p className="text-sm text-slate-500 mt-1">{treatmentData.HospitalName}</p>
+                 {/* <p className="text-sm text-slate-500 mt-1">{treatmentData.HospitalName}</p> */}
                </div>
             </div>
           </div>
@@ -179,7 +195,7 @@ const TreatmentTypeDetails = () => {
                   Edit Treatment Type
                 </button>
                 <button 
-                  onClick={handleDelete}
+                  onClick={()=>{handleDelete(id)}}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Trash2 className="w-4 h-4" />

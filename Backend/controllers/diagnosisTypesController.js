@@ -52,11 +52,11 @@ const deleteDiagnosisType=async(req,res)=>{
     try{
         const data=await DiagnosisTypes.findOneAndDelete({DiagnosisTypeID:req.params.id})
 
-        res.status(201).json(data)
+        return res.status(201).json(data)
     }
     catch(error)
     {
-        res.status(400).error({error:error.message})
+        return res.status(400).error({error:error.message})
     }
 }
 

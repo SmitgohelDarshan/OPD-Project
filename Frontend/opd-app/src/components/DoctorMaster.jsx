@@ -296,7 +296,7 @@ export default DoctorMaster */
 
 
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Search, 

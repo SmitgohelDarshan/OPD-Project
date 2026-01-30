@@ -14,6 +14,8 @@ import {
   IndianRupee,
   Link as LinkIcon
 } from 'lucide-react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const SubTreatmentTypeDetails = () => {
   const { expanded } = useContext(SidebarContext);
@@ -21,18 +23,20 @@ const SubTreatmentTypeDetails = () => {
   const { id } = useParams();
 
   // --- Mock Data (Replace with API call using id) ---
-  const subTreatmentData = {
-    SubTreatmentTypeID: id || 1,
-    SubTreatmentTypeName: "Ultrasonic Scaling",
-    TreatmentTypeID: 2,
-    TreatmentTypeName: "Dental Cleaning",
-    Rate: 1200.00,
-    Description: "Deep cleaning using ultrasonic scaler.",
-    AccountID: 9001,
-    UserID: 502,
-    Created: "2025-10-21T10:30:00",
-    Modified: "2025-10-21T10:30:00"
-  };
+  const [subTreatmentData,setSubTreatmentData] =useState({})
+  
+   useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/api/subtreatments/${id}`);
+          const data = await response.json();
+          setSubTreatmentData(data[0]);
+        } catch (err) {
+          console.error("Fetch error:", err);
+        }
+      };
+      fetchData();
+    }, [id]);
 
   // Helper to format dates
   const formatDate = (isoString) => {
@@ -43,15 +47,26 @@ const SubTreatmentTypeDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
-    if(window.confirm("Are you sure you want to delete this sub-treatment type?")) {
+  const handleDelete = async(id) => {
+ 
+    if(confirm("Are you sure you want to delete this Sub-treatment Type record?")) {
       try {
         // TODO: Replace with actual API call
-        // await fetch(`/api/subtreatments/${id}`, { method: 'DELETE' });
+        // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/subtreatments/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        if (!req==201) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`Sub-treatment deleted with ${id}`);
         navigate('/admin/getAllSubTreatments');
       } catch (error) {
-        console.error('Error deleting sub-treatment type:', error);
-        alert('Failed to delete sub-treatment type. Please try again.');
+        console.error('Error deleting Sub-treatment Type:', error);
+        alert('Failed to delete Sub-treatment Type record. Please try again.');
       }
     }
   };
@@ -104,7 +119,7 @@ const SubTreatmentTypeDetails = () => {
                   </span>
                   <div className="flex items-center gap-1 text-2xl font-bold text-orange-600">
                     <IndianRupee className="w-5 h-5" />
-                    {subTreatmentData.Rate.toFixed(2)}
+                    {subTreatmentData.Rate}
                   </div>
                 </div>
               </div>
@@ -158,7 +173,7 @@ const SubTreatmentTypeDetails = () => {
 
               <div className="flex justify-between items-center py-2 border-b border-gray-50">
                 <span className="text-xs text-slate-500">Rate</span>
-                <span className="text-sm font-bold text-orange-600">₹{subTreatmentData.Rate.toFixed(2)}</span>
+                <span className="text-sm font-bold text-orange-600">₹{subTreatmentData.Rate}</span>
               </div>
 
               <div className="flex justify-between items-center py-2 border-b border-gray-50">
@@ -196,7 +211,7 @@ const SubTreatmentTypeDetails = () => {
                   Edit Sub-Treatment
                 </button>
                 <button 
-                  onClick={handleDelete}
+                  onClick={()=>{handleDelete(id)}}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Trash2 className="w-4 h-4" />

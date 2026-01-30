@@ -16,7 +16,7 @@ const registerHospital=async(req,res)=>{
 
 const getHospitalById=async(req,res)=>{
     try {
-        const hospital = await Hospital.findById(req.params.id)
+        const hospital = await Hospital.find({HospitalID:req.params.id})
 
         res.status(201).json(hospital)
     } catch (error) {
@@ -49,11 +49,11 @@ const updateHospital=async(req,res)=>{
 
 const deleteHospital=async(req,res)=>{
     try {
-        const hospital = await Hospital.findByIdAndDelete(req.params.id)
+        const hospital = await Hospital.findOneAndDelete({HospitalID:req.params.id})
 
-        res.status(201).json(hospital)
+        return res.status(201).json(hospital)
     } catch (error) {
-        res.status(400).error({error:error.message})
+        return res.status(400).error({error:error.message})
     }
 }
 
