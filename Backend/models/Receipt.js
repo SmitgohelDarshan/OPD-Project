@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const Counter=require('./Counter');
+const {customAlphabet}=require('nanoid')
+
+const generateHash=customAlphabet('0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ',8)
 
 const ReceiptSchema = new mongoose.Schema({
   ReceiptID: { type: Number, unique: true },
@@ -24,6 +28,10 @@ ReceiptSchema.pre('save',async function(){
 
     this.ReceiptID=counter.seq;
     console.log(counter.seq);
+
+    const hash=generateHash();
+
+    this.ReceiptNo=`REC-${hash.substring(0,4)}-${hash.substring(4,8)}`
     
   }
   catch(error){

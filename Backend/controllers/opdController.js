@@ -2,11 +2,13 @@ const OPD = require('../models/OPD');
 
 const registerOPD = async(req,res)=>{
     try {
-        const newOPD = await OPD.insertOne(req.body);
-
-        return res.status(201).json(newOPD)
+        const newOPD=await OPD(req.body)
+        
+        const savedOPD=await newOPD.save()
+        
+        return res.status(201).json(savedOPD)
     } catch (error) {
-        return res.status(400).error({error:error.message});
+        return res.status(400).json({error:error.message});
     }
 }
 
@@ -17,7 +19,7 @@ const getOPDById = async(req,res)=>{
 
         return res.status(201).json(OPDs)
     } catch (error) {
-        return res.status(400).error({error:error.message});
+        return res.status(400).json({error:error.message});
     }
 }
 
@@ -37,7 +39,7 @@ const updateOPD = async(req,res)=>{
         const opd = await OPD.findOneAndUpdate({OPDID:req.params.id}, req.body);
         return res.status(201).json(opd)
     } catch (error) {
-        return res.status(400).error({error:error.message});
+        return res.status(400).json({error:error.message});
     }
 }
 
@@ -47,7 +49,7 @@ const deleteOPD = async(req,res)=>{
 
         return res.status(201).json(opd)
     } catch (error) {
-        return res.status(400).error({error:error.message});        
+        return res.status(400).json({error:error.message});        
     }
 }
 

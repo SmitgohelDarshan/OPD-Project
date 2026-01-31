@@ -6,7 +6,7 @@ const registerSchema=Joi.object({
     TreatmentTypeID:Joi.number().required(),
     Rate:Joi.number().positive().required(),
     IsActive:Joi.boolean().required(),
-    Description:Joi.boolean().required(),
+    Description:Joi.boolean(),
     UserID:Joi.number().positive().required(),
     AccountID:Joi.number().positive()
 })

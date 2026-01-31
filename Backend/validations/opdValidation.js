@@ -1,7 +1,7 @@
 const Joi = require('joi')
 
 const registerSchema = Joi.object({
-    OPDID:Joi.number().positive().required(),
+    OPDID:Joi.number().positive(),
     OPDNo:Joi.string().max(250),
     OPDDateTime:Joi.date().required(),
     PatientID:Joi.number().positive().required(),

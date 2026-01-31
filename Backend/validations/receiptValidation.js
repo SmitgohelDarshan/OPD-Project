@@ -1,7 +1,7 @@
 const Joi=require("joi")
 
 const registerSchema=Joi.object({
-    ReceiptID:Joi.number().positive().required(),
+    ReceiptID:Joi.number().positive(),
     ReceiptNo:Joi.string().max(250),
     ReceiptDate:Joi.date().required(),
     OPDID:Joi.number().positive().required(),
