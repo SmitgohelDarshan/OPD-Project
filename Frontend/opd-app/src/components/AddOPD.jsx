@@ -13,7 +13,8 @@ import {
   Hash,
   IndianRupee,
   History,
-  CalendarDays
+  CalendarDays,
+  UserRound
 } from 'lucide-react';
 
 const AddOPD = () => {
@@ -237,7 +238,7 @@ const AddOPD = () => {
             </div>
 
             {/* Old OPD No */}
-            <div className="col-span-1 lg:col-span-2">
+            <div className="col-span-1">
               <label className="block text-sm font-semibold text-slate-700 mb-2">Previous OPD No. (If available)</label>
               <div className="relative">
                 <History className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -252,6 +253,20 @@ const AddOPD = () => {
               </div>
             </div>
 
+             <div className="col-span-1">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">User ID <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <UserRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input 
+                  type="text" 
+                  name="UserID"
+                  placeholder="User ID"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  value={formData.UserID}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
             {/* Description */}
             <div className="col-span-full">
               <label className="block text-sm font-semibold text-slate-700 mb-2">Chief Complaints / Remarks</label>

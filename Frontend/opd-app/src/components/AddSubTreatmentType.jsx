@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Save, 
@@ -17,20 +17,10 @@ import {
 const AddSubTreatmentType = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
+  const{id}=useParams();
 
   // --- Form State ---
-  const [formData, setFormData] = useState({
-    SubTreatmentTypeID: 0,
-    SubTreatmentTypeName: '',
-    TreatmentTypeID: '', // Parent Category
-    Rate: '',
-    IsActive: true,
-    Description: '',
-    AccountID: '', // Ledger Mapping
-    UserID: 1, 
-    Created: new Date().toISOString(),
-    Modified: new Date().toISOString()
-  });
+  const [formData, setFormData] = useState([]);
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -43,19 +33,66 @@ const AddSubTreatmentType = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log("Submitting Sub-Treatment Data:", formData);
-      // API call logic here
-      navigate('/admin/getAllSubTreatments');
-    } catch (error) {
-      console.error('Error saving sub-treatment:', error);
-      alert('Failed to save sub-treatment type.');
+    if (id) {
+      try {
+        const { Created, Modified, SubTreatmentTypeID, _id, ...updateData } = formData;
+        console.log("Submitting to MongoDB Schema:", updateData);
+        // Example API call:
+
+        const response = await fetch(
+          "http://localhost:3000/api/subtreatments/update/" + id,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`Sub-Treatment Type edited with id ${result.SubTreatmentTypeID}`);
+          navigate("/admin/addSubTreatment/" + id);
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error editing Sub-Treatment Type:", error);
+        alert("Failed to save Sub-Treatment Type. Please check schema constraints.");
+      }
+    } else {
+      try {
+        console.log("Submitting to MongoDB Schema:", formData);
+        // Example API call:
+        const response = await fetch(
+          "http://localhost:3000/api/opds/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`Hospital added with id ${result.OPDID}`);
+          navigate("/admin/getAllSubTreatments");
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error saving Sub-Treatment Type:", error);
+        alert("Failed to save Sub-Treatment Type. Please check schema constraints.");
+      }
     }
   };
+  const handleCancel = () =>{ if(id){navigate('/admin/addSubTreatment/'+id)}else{navigate('/admin/getAllSubTreatments')}};
 
-  const handleCancel = () => {
-    navigate('/admin/getAllSubTreatments');
-  };
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>
