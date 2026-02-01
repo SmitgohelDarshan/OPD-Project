@@ -1,7 +1,7 @@
 const Joi=require("joi")
 
 const registerSchema=Joi.object({
-    DiagnosisTypeID:Joi.number().positive().required(),
+    DiagnosisTypeID:Joi.number().positive(),
     DiagnosisTypeName:Joi.string().max(250).required(),
     DiagnosisTypeShortName:Joi.string().max(50),
     IsActive:Joi.boolean().required(),

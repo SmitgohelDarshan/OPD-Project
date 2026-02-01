@@ -2,9 +2,11 @@ const SubTreatmentType = require("../models/SubTreatmentTypes")
 
 const registerSubTreatmentType=async(req,res)=>{
     try{
-        const newSubTreatmentType=await SubTreatmentType.insertOne(req.body)
-
-        return res.status(201).json(newSubTreatmentType)
+        const result=await SubTreatmentType(req.body)
+        
+        const savedSubTreatmentType=await result.save()
+        
+        return res.status(201).json(savedSubTreatmentType)
     }
     catch(error)
     {
@@ -15,9 +17,9 @@ const registerSubTreatmentType=async(req,res)=>{
 
 const getSubTreatmentTypeById=async(req,res)=>{
     try{
-        const subTreatment=await SubTreatmentType.find({SubTreatmentTypeID:req.params.id})
+        const result=await SubTreatmentType.find({SubTreatmentTypeID:req.params.id})
 
-        return res.status(201).json(subTreatment)
+        return res.status(201).json(result)
     }
     catch(error)
     {
@@ -27,9 +29,9 @@ const getSubTreatmentTypeById=async(req,res)=>{
 
 const getAllSubTreatmentTypes=async(req,res)=>{
     try{
-        const subTreatments=await SubTreatmentType.find({})
+        const result=await SubTreatmentType.find({})
 
-        return res.status(201).json(subTreatments)
+        return res.status(201).json(result)
     }
     catch(error)
     {
@@ -38,9 +40,9 @@ const getAllSubTreatmentTypes=async(req,res)=>{
 }
 const updateSubTreatmentType=async(req,res)=>{
     try{
-        const subTreatment=await SubTreatmentType.findOneAndUpdate({SubTreatmentTypeID:req.params.id},req.body)
+        const result=await SubTreatmentType.findOneAndUpdate({SubTreatmentTypeID:req.params.id},req.body)
 
-        return res.status(201).json(subTreatment)
+        return res.status(201).json(result)
     }
     catch(error)
     {
@@ -50,9 +52,9 @@ const updateSubTreatmentType=async(req,res)=>{
 
 const deleteSubTreatmentType=async(req,res)=>{
     try{
-        const subTreatment=await SubTreatmentType.findOneAndDelete({SubTreatmentTypeID:req.params.id})
+        const result=await SubTreatmentType.findOneAndDelete({SubTreatmentTypeID:req.params.id})
 
-        return res.status(201).json(subTreatment)
+        return res.status(201).json(result)
     }
     catch(error)
     {
