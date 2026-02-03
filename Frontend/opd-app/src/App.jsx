@@ -115,7 +115,7 @@ function App() {
                         <Route path="/admin/getAllOPDs" element={<OPDMaster />} />
                         <Route path="/admin/getOPD/:id" element={<OPDDetails />} />
                         <Route path="/admin/addOPD" element={<AddOPD/>} />
-                        <Route path="/admin/editOPD/:id" element={<OPDDetails />} />
+                        <Route path="/admin/editOPD/:id" element={<AddOPD />} />
                         <Route path="/admin/deleteOPD/:id" element={<OPDDetails />} />
 
 
