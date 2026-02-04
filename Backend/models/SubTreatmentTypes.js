@@ -9,7 +9,7 @@ const SubTreatmentTypeSchema = new mongoose.Schema({
   Description: { type: String,minLength:0, maxLength: 250 },
   UserID: { type: Number, required: true },
   AccountID: { type: Number }
-}, { timestamps: { createdAt: 'Created', updatedAt: 'Modified' } });
+}, { timestamps: { createdAt: 'Created', updatedAt: 'Modified' } },{versionKey:false});
 
 SubTreatmentTypeSchema.pre('save',async function(){
   if(!this.isNew) return;

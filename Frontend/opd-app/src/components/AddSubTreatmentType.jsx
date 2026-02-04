@@ -33,20 +33,15 @@ const AddSubTreatmentType = () => {
     AccountID: ''
     });
 
-  useEffect(() => {
+  
   if (id) {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/subtreatments/${id}`);
-        const data = await response.json();
-        setFormData(data[0]); // Fill the form with existing data
-      } catch (err) {
-        console.error("Failed to fetch sub-treatment", err);
-      }
-    };
-    fetchData();
+    useEffect(()=>{
+          fetch('http://localhost:3000/api/subtreatments/'+id)
+          .then((res)=>res.json())
+          .then((json)=>setFormData(json[0]))
+        },[])
   }
-}, [id]);
+
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -63,7 +58,7 @@ const AddSubTreatmentType = () => {
    
     if (id) {
       try {
-        const { Created, Modified, SubTreatmentTypeID, _id, ...updateData } = formData;
+        const { Created, Modified, SubTreatmentTypeID, _id, __v, ...updateData } = formData;
         console.log("Submitting to MongoDB Schema:", updateData);
         // Example API call:
 
@@ -82,7 +77,7 @@ const AddSubTreatmentType = () => {
         console.log(result);
         if (response.status == 201) {
           alert(`Sub-Treatment Type edited with id ${result.SubTreatmentTypeID}`);
-          navigate("/admin/addSubTreatment/" + id);
+          navigate("/admin/getSubTreatment/" + id);
         } else {
           alert(`Error:${result.message}`);
         }
@@ -108,7 +103,7 @@ const AddSubTreatmentType = () => {
         const result = await response.json();
         console.log(result);
         if (response.status == 201) {
-          alert(`Hospital added with id ${result.SubTreatmentTypeID}`);
+          alert(`SubTreatment added with id ${result.SubTreatmentTypeID}`);
           navigate("/admin/getAllSubTreatments");
         } else {
           alert(`Error:${result.message}`);
@@ -119,7 +114,7 @@ const AddSubTreatmentType = () => {
       }
     }
   };
-  const handleCancel = () =>{ if(id){navigate('/admin/addSubTreatment/'+id)}else{navigate('/admin/getAllSubTreatments')}};
+  const handleCancel = () =>{ if(id){navigate('/admin/getSubTreatment/'+id)}else{navigate('/admin/getAllSubTreatments')}};
 
 
   return (

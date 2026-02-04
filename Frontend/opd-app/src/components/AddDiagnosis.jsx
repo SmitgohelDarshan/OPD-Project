@@ -78,7 +78,7 @@ const AddDiagnosis = () => {
         console.log(result);
         if (response.status == 201) {
           alert(`Diagnosis Type edited with id ${result.DiagnosisTypeID}`);
-          navigate("/admin/addDiagnosisType/" + id);
+          navigate("/admin/getDiagnosisType/" + id);
         } else {
           alert(`Error:${result.message}`);
         }

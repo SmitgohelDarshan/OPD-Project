@@ -69,7 +69,7 @@ function App() {
                         <Route path="/admin/getAllHospitals" element={<HospitalMaster />} />
                         <Route path="/admin/getHospital/:id" element={<HospitalDetails />} />
                         <Route path="/admin/addHospital" element={<AddHospital/>} />
-                        <Route path="/admin/editHospital/:id" element={<HospitalDetails />} />
+                        <Route path="/admin/editHospital/:id" element={<AddHospital />} />
                         <Route path="/admin/deleteHospital/:id" element={<HospitalDetails />} />
 
 
@@ -77,7 +77,7 @@ function App() {
                           <Route path="/admin/getAllDoctors" element={<DoctorMaster />} />
                           <Route path="/admin/getDoctor/:id" element={<DoctorDetails />} />
                           <Route path="/admin/addDoctor" element={<DoctorAdd />} />
-                          <Route path="/admin/editDoctor/:id" element={<DoctorDetails />} />
+                          <Route path="/admin/editDoctor/:id" element={<DoctorAdd />} />
                           <Route path="/admin/deleteDoctor/:id" element={<DoctorDetails />} />
 
                           <Route path="/admin/getAllStaffs" element={<StaffMaster />} />
@@ -89,26 +89,26 @@ function App() {
                           <Route path="/admin/getAllTreatments" element={<TreatmentTypeMaster />} />
                           <Route path="/admin/getTreatment/:id" element={<TreatmentTypeDetails/>} />
                           <Route path="/admin/addTreatmentType" element={<AddTreatmentType />} />
-                          <Route path="/admin/editTreatment/:id" element={<TreatmentTypeDetails />} />
+                          <Route path="/admin/editTreatment/:id" element={<AddTreatmentType />} />
                           <Route path="/admin/deleteTreatment/:id" element={<TreatmentTypeDetails />} />
 
                           <Route path="/admin/getAllDiagnosisTypes" element={<DiagnosisTypeMaster />} />
                           <Route path="/admin/getDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
                           <Route path="/admin/addDiagnosisType" element={<AddDiagnosis/>} />
-                          <Route path="/admin/editDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
+                          <Route path="/admin/editDiagnosisType/:id" element={<AddDiagnosis />} />
                           <Route path="/admin/deleteDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
 
                           <Route path="/admin/getAllSubTreatments" element={<SubTreatmentTypeMaster />} />
                           <Route path="/admin/getSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
                           <Route path="/admin/addSubTreatment" element={<AddSubTreatmentType />} />
-                          <Route path="/admin/editSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
+                          <Route path="/admin/editSubTreatment/:id" element={<AddSubTreatmentType />} />
                           <Route path="/admin/deleteSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
 
                         
                         <Route path="/admin/getAllPatients" element={<PatientMaster />} />
                         <Route path="/admin/getPatient/:id" element={<PatientDetails />} />
                         <Route path="/admin/addPatient" element={<AddPatient />} />
-                        <Route path="/admin/editPatient/:id" element={<PatientDetails />} />
+                        <Route path="/admin/editPatient/:id" element={<AddPatient />} />
                         <Route path="/admin/deletePatient/:id" element={<PatientDetails />} />
 
 
@@ -122,7 +122,7 @@ function App() {
                         <Route path="/admin/getAllReceipts" element={<ReceiptMasterAdmin />} />
                         <Route path="/admin/getReceipt/:id" element={<ReceiptDetailsAdmin />} />
                         <Route path="/admin/addReceipt" element={<AddReceipt />} />
-                        <Route path="/admin/editReceipt/:id" element={<ReceiptDetails />} />
+                        <Route path="/admin/editReceipt/:id" element={<AddReceipt />} />
                         <Route path="/admin/deleteReceipt/:id" element={<ReceiptDetails />} />
                           
                     </Route>

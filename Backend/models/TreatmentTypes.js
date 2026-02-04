@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Counter = require('./Counter');
 const TreatmentTypeSchema = new mongoose.Schema({
   TreatmentTypeID: { type: Number, unique: true },
   TreatmentTypeName: { type: String, required: true, maxLength: 250 },

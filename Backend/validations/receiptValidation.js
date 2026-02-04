@@ -9,7 +9,7 @@ const registerSchema=Joi.object({
     Description:Joi.string().max(250),
     UserID:Joi.number().positive().required(),
     PaymentModeID:Joi.number().positive().required(),
-    ReferenceNo:Joi.string().max(250),
+    ReferenceNo:Joi.string().min(0).max(250),
     ReferenceDate:Joi.date(),
     cancellationDateTime:Joi.date(),
     cancellationByUserID:Joi.number().positive(),

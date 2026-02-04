@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
@@ -24,12 +24,41 @@ const AddReceipt = () => {
   const redirectPath = isAdmin ? '/admin/getAllReceipts' : '/staff/getAllReceipts';
 
   // --- Form State ---
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState({
+  ReceiptNo:'',
+  ReceiptDate: '',
+  OPDID: '',
+  AmountPaid: '',
+  Description: '',
+  UserID: '',
+  PaymentModeID: '',
+  ReferenceNo: '',
+  ReferenceDate: '',
+  cancellationDateTime: '',
+  CancellationByUserID: '',
+  CancellationRemarks: ''
+  });
 
   // --- Handlers ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  if(id){
+      useEffect(()=>{
+        fetch('http://localhost:3000/api/receipts/'+id)
+        .then((res)=>res.json())
+        .then((json)=>setFormData(json[0]))
+      },[])
+    }
+
+    const formatDateTime = (dateString) => {
+    if (!dateString) return ""; // Handle undefined/null during initial load
+    const dateObj = new Date(dateString);
+    return new Date(dateObj.getTime() - (dateObj.getTimezoneOffset() * 60000))
+      .toISOString()
+      .slice(0, 16);
   };
 
   const handleSubmit = async (e) => {
@@ -146,11 +175,11 @@ const AddReceipt = () => {
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
-                  type="date" 
+                  type="datetime-local" 
                   name="ReceiptDate"
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
-                  value={formData.ReceiptDate}
+                  value={formatDateTime(formData.ReceiptDate)}
                   onChange={handleChange}
                 />
               </div>
@@ -250,10 +279,10 @@ const AddReceipt = () => {
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
-                  type="date" 
+                  type="datetime-local" 
                   name="ReferenceDate"
                   className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
-                  value={formData.ReferenceDate}
+                  value={formatDateTime(formData.ReferenceDate)}
                   onChange={handleChange}
                 />
               </div>

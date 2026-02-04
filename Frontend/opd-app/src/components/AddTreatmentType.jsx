@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Save, 
@@ -14,18 +14,25 @@ import {
 const AddTreatmentType = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
+  const{id}=useParams();
+
 
   // --- Form State ---
   const [formData, setFormData] = useState({
-    TreatmentTypeID: 0,
     TreatmentTypeName: '',
     TreatmentTypeShortName: '',
     HospitalID: '',
     Description: '',
     UserID: 1, 
-    Created: new Date().toISOString(),
-    Modified: new Date().toISOString()
   });
+
+  if (id) {
+      useEffect(()=>{
+            fetch('http://localhost:3000/api/treatments/'+id)
+            .then((res)=>res.json())
+            .then((json)=>setFormData(json[0]))
+          },[])
+    }
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -36,21 +43,69 @@ const AddTreatmentType = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log("Submitting Treatment Type:", formData);
-      // API call placeholder
-      navigate('/admin/getAllTreatmentTypes');
-    } catch (error) {
-      console.error('Error saving treatment type:', error);
-      alert('Failed to save treatment type.');
+   
+    if (id) {
+      try {
+        const { Created, Modified, TreatmentTypeID, _id, ...updateData } = formData;
+        console.log("Submitting to MongoDB Schema:", updateData);
+        // Example API call:
+
+        const response = await fetch(
+          "http://localhost:3000/api/treatments/update/" + id,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`Sub-Treatment Type edited with id ${result.TreatmentTypeID}`);
+          navigate("/admin/getTreatment/" + id);
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error editing Treatment Type:", error);
+        alert("Failed to save Treatment Type. Please check schema constraints.");
+      }
+    } else {
+      try {
+        const { Created, Modified, TreatmentTypeID, _id, ...addData } = formData;
+        // Example API call:
+        const response = await fetch(
+          "http://localhost:3000/api/treatments/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(addData),
+          },
+        );
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status == 201) {
+          alert(`SubTreatment added with id ${result.TreatmentTypeID}`);
+          navigate("/admin/getAllTreatments");
+        } else {
+          alert(`Error:${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error saving Sub-Treatment Type:", error);
+        alert("Failed to save Sub-Treatment Type. Please check schema constraints.");
+      }
     }
   };
+  const handleCancel = () =>{ if(id){navigate('/admin/getTreatment/'+id)}else{navigate('/admin/getAllTreatments')}};
 
-  const handleCancel = () => {
-    navigate('/admin/getAllTreatmentTypes');
-  };
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>
@@ -111,17 +166,13 @@ const AddTreatmentType = () => {
               <label className="block text-sm font-semibold text-slate-700 mb-2">Assign to Hospital <span className="text-red-500">*</span></label>
               <div className="relative">
                 <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <select 
+                <input 
                   name="HospitalID"
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all appearance-none"
                   value={formData.HospitalID}
                   onChange={handleChange}
-                >
-                  <option value="">Select Hospital</option>
-                  <option value="1">City General Hospital</option>
-                  <option value="2">Suburban Clinic</option>
-                </select>
+                />
               </div>
             </div>
 

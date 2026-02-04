@@ -40,7 +40,7 @@ const updateTreatmentType=async(req,res)=>{
     try{
         const treatement=await TreatmentType.findOneAndUpdate({TreatmentTypeID:req.params.id},req.body)
 
-        return res.status(201).json(treatment)
+        return res.status(201).json(treatement)
     }
     catch(error)
     {

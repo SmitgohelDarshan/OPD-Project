@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Save, 
@@ -12,15 +12,42 @@ import {
   ToggleLeft,
   ToggleRight,
   ImageIcon,
-  AlignLeft
+  AlignLeft,
+  User
 } from 'lucide-react';
 
 const AddHospital = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
+  const{id}=useParams();
+
 
   // --- Form State aligned with HospitalSchema ---
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    
+        HospitalName:'',
+        DefaultPaymentModeID:'',
+        RegistrationCharge:'',
+        RegistrationValidityMonths:'',
+        OpeningDate:'',
+        OpeningPatientNo:'',
+        OpeningOPDNo:'',
+        OpeningReceiptNo:'',
+        Description:'',
+        UserID:'',
+        Address:'',
+        IsRateEnableInReceipt:'',
+        IsRegistrationFeeEnableInOPD:'',
+        ImageURL:''
+  });
+
+  if(id){
+      useEffect(()=>{
+        fetch('http://localhost:3000/api/hospitals/'+id)
+        .then((res)=>res.json())
+        .then((json)=>setFormData(json[0]))
+      },[])
+  }
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -43,6 +70,14 @@ const AddHospital = () => {
       ...formData, 
       [name]: finalValue 
     });
+  };
+
+  const formatDateTime = (dateString) => {
+  if (!dateString) return ""; // Handle undefined/null during initial load
+  const dateObj = new Date(dateString);
+  return new Date(dateObj.getTime() - (dateObj.getTimezoneOffset() * 60000))
+    .toISOString()
+    .slice(0, 16);
   };
 
   const handleSubmit = async (e) => {
@@ -156,18 +191,18 @@ const AddHospital = () => {
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
-                  type="date" 
+                  type="datetime-local" 
                   name="OpeningDate"
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
-                  value={formData.OpeningDate}
+                  value={formatDateTime(formData.OpeningDate)}
                   onChange={handleChange}
                 />
               </div>
             </div>
 
             {/* Image URL */}
-            <div className="col-span-1 lg:col-span-2">
+            {/* <div className="col-span-1 lg:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 mb-2">Hospital Image URL</label>
               <div className="relative">
                 <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -179,6 +214,51 @@ const AddHospital = () => {
                   value={formData.ImageURL}
                   onChange={handleChange}
                 />
+              </div>
+            </div> */}
+
+            <div className="col-span-full text-xs font-bold text-slate-400 uppercase tracking-wider mt-4 mb-2 border-b border-gray-100 pb-2">
+              Profile Media
+            </div>
+            
+            <div className="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+              {/* URL Input */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Doctor Image URL
+                </label>
+                <div className="relative">
+                  <input 
+                    type="url" 
+                    name="ImageURL"
+                    placeholder="https://example.com/photo.jpg"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                    value={formData.ImageURL}
+                    onChange={handleChange}
+                  />
+                </div>
+                <p className="text-xs text-slate-500 mt-2 italic">Paste a direct link to the doctor's portrait.</p>
+              </div>
+            
+              {/* Image Preview Box */}
+              <div className="flex flex-col items-center justify-center">
+                <label className="block text-sm font-semibold text-slate-700 mb-2 w-full text-center md:text-left">
+                  Preview
+                </label>
+                <div className="w-32 h-32 rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center overflow-hidden shadow-inner">
+                  {formData.ImageURL ? (
+                    <img 
+                      src={formData.ImageURL} 
+                      alt="Preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/150?text=Invalid+URL';
+                      }}
+                    />
+                  ) : (
+                    <User className="w-12 h-12 text-gray-400" />
+                  )}
+                </div>
               </div>
             </div>
 

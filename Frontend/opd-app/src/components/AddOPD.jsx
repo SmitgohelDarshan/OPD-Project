@@ -20,7 +20,7 @@ import {
 const AddOPD = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
-  const{id}=useParams()
+  const{id}=useParams();
 
   // --- Form State ---
   const [formData, setFormData] = useState({
