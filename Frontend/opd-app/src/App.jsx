@@ -143,6 +143,7 @@ function App() {
                           <Route path="/patient/dashboard" element={<DashboardPatient/>}/>
                           <Route path="/patient/bookAppointment" element={<DoctorMasterPatient/>} />
                           <Route path="/patient/getAllVisits" element={<PatientVisits/>}/>
+                          <Route path="/patient/getAllVisits" element={<PatientVisits/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>
