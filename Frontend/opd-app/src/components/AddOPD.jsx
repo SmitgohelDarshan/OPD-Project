@@ -38,7 +38,7 @@ const AddOPD = () => {
 
   if(id){
     useEffect(()=>{
-      fetch('http://localhost:3000/api/opds/'+id)
+      fetch('http://localhost:3000/api/opds/'+id), {credentials:'include'}
       .then((res)=>res.json())
       .then((json)=>setFormData(json[0]))
     },[])
@@ -71,7 +71,7 @@ const AddOPD = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/opds/update/" + id,
+          "http://localhost:3000/api/opds/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -98,7 +98,7 @@ const AddOPD = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/opds/register",
+          "http://localhost:3000/api/opds/register", {credentials:'include'},
           {
             method: "POST",
             headers: {

@@ -5,7 +5,8 @@ const Counter=require("./Counter")
 const generateHash=customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',8)
 
 const PatientSchema = new mongoose.Schema({
-  PatientID: { type: String},
+  PatientID: { type: Number },
+  Email:{type:String, required:true},
   PatientName: { type: String, maxLength: 250 },
   PatientNo: { type: String },
   RegistrationDateTime: { type: Date, required: true },

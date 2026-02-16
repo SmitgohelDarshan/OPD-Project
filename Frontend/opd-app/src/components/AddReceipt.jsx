@@ -47,7 +47,7 @@ const AddReceipt = () => {
 
   if(id){
       useEffect(()=>{
-        fetch('http://localhost:3000/api/receipts/'+id)
+        fetch('http://localhost:3000/api/receipts/'+id), {credentials:'include'}
         .then((res)=>res.json())
         .then((json)=>setFormData(json[0]))
       },[])
@@ -70,7 +70,7 @@ const AddReceipt = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/receipts/update/" + id,
+          "http://localhost:3000/api/receipts/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -97,7 +97,7 @@ const AddReceipt = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/receipts/register",
+          "http://localhost:3000/api/receipts/register", {credentials:'include'},
           {
             method: "POST",
             headers: {

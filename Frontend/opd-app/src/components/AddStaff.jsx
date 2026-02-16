@@ -33,7 +33,7 @@ const AddStaff = () => {
   
   if(id){
       useEffect(()=>{
-        fetch('http://localhost:3000/api/staffs/'+id)
+        fetch('http://localhost:3000/api/staffs/'+id), {credentials:'include'}
         .then((res)=>res.json())
         .then((json)=>setFormData(json[0]))
       },[])
@@ -60,7 +60,7 @@ const AddStaff = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/staffs/update/" + id,
+          "http://localhost:3000/api/staffs/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -87,7 +87,7 @@ const AddStaff = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/staffs/register",
+          "http://localhost:3000/api/staffs/register", {credentials:'include'},
           {
             method: "POST",
             headers: {

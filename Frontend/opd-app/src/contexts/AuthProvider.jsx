@@ -1,6 +1,7 @@
 import React from 'react'
 import { createContext, useContext } from "react";
 import { useEffect, useState } from "react";
+// import jwtDecode from "jwt-decode"
 
 export const AuthContext=createContext(null)
 
@@ -30,10 +31,12 @@ export function AuthProvider({ children }) {
       .finally(()=>{
         setLoading(false)
       })
-  },[]);    
+        
+  }, []);
 
+  
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{user,setUser,loading}}>
       {children}
     </AuthContext.Provider>
   );

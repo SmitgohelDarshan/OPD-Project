@@ -28,7 +28,7 @@ const AddTreatmentType = () => {
 
   if (id) {
       useEffect(()=>{
-            fetch('http://localhost:3000/api/treatments/'+id)
+            fetch('http://localhost:3000/api/treatments/'+id), {credentials:'include'}
             .then((res)=>res.json())
             .then((json)=>setFormData(json[0]))
           },[])
@@ -53,7 +53,7 @@ const AddTreatmentType = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/treatments/update/" + id,
+          "http://localhost:3000/api/treatments/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -80,7 +80,7 @@ const AddTreatmentType = () => {
         const { Created, Modified, TreatmentTypeID, _id, ...addData } = formData;
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/treatments/register",
+          "http://localhost:3000/api/treatments/register", {credentials:'include'},
           {
             method: "POST",
             headers: {

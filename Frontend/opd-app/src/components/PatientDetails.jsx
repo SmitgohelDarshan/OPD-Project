@@ -16,10 +16,14 @@ function PatientDetails() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/patients/${id}`);
+        const response = await fetch(`http://localhost:3000/api/patients/${id}`, {credentials:'include'});
         const data = await response.json();
+        console.log(data);
+        // console.log(data[0]);
+
+        
         // Assuming data is an array based on your previous code
-        setPatientData(data[0] || data);
+        setPatientData(data);
       } catch (err) {
         console.error("Fetch error:", err);
       }
@@ -32,7 +36,7 @@ function PatientDetails() {
       try {
         const req = await fetch(`http://localhost:3000/api/patients/delete/${id}`, {
           method: 'DELETE'
-        });
+        }, {credentials:'include'});
         if (req.status === 200 || req.status === 201) {
           alert(`Patient record ${id} deleted successfully`);
           navigate('/admin/getAllPatients');

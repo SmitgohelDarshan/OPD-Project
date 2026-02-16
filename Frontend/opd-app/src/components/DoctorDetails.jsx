@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
 import { 
@@ -19,19 +19,41 @@ const DoctorDetails = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
   const { id } = useParams();
+  console.log(id)
 
   // --- Mock Data (Replace with API call using id) ---
-  const doctorData = {
-    DoctorID: id || 105,
-    DoctorName: "Dr. Arjun Mehta",
-    StaffID: 402,
-    StudentID: null,
-    HospitalID: 1,
-    HospitalName: "City Care General Hospital",
-    Description: "Senior Cardiologist specializing in interventional cardiology. Has over 12 years of experience in managing complex heart conditions.",
-    UserID: 10,
-    Created: "2024-03-15T09:30:00",
-    Modified: "2025-01-12T14:45:00"
+  const [doctorData,setDoctorData] = useState({});
+
+  useEffect(()=>{
+    fetch("http://localhost:3000/api/doctors/"+id, {credentials:'include'})
+            .then((res)=>res.json())
+            .then((json)=>setDoctorData(json[0]))
+   },[])
+
+   const handleDelete = async(id) => {
+    
+    if(confirm("Are you sure you want to delete this Doctor record?")) {
+      try {
+        
+        // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
+        const req=await fetch(`http://localhost:3000/api/doctors/delete/${id}`,{
+          method:'DELETE'
+        })
+
+        
+
+        if (!req.ok) {
+        throw new Error('Failed to delete the record from the server');
+      }
+
+        
+        alert(`Doctor deleted with ${id}`);
+        navigate('/admin/getAllDoctors');
+      } catch (error) {
+        console.error('Error deleting Doctor:', error);
+        alert('Failed to delete Doctor record. Please try again.');
+      }
+    }
   };
 
   // Helper to format dates
@@ -43,19 +65,7 @@ const DoctorDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
-    if(window.confirm("Are you sure you want to delete this doctor?")) {
-      try {
-        // TODO: Replace with actual API call
-        // await fetch(`/api/doctors/${id}`, { method: 'DELETE' });
-        navigate('/admin/getAllDoctors');
-      } catch (error) {
-        console.error('Error deleting doctor:', error);
-        alert('Failed to delete doctor. Please try again.');
-      }
-    }
-  };
-
+  
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>
       
@@ -85,7 +95,7 @@ const DoctorDetails = () => {
               <div className="relative -mt-12 mb-4">
                 <div className="w-24 h-24 bg-white rounded-full p-1.5 shadow-md">
                    <div className="w-full h-full bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
-                      <User className="w-10 h-10" />
+                      <img src={doctorData.Image} className='rounded-full w-full h-full' />
                    </div>
                 </div>
               </div>
@@ -95,7 +105,7 @@ const DoctorDetails = () => {
                   <h2 className="text-2xl font-bold text-slate-900">{doctorData.DoctorName}</h2>
                   <div className="flex items-center gap-2 text-slate-500 mt-1">
                     <Building2 className="w-4 h-4" />
-                    <span>{doctorData.HospitalName}</span>
+                    <span>{doctorData.HospitalID}</span>
                   </div>
                 </div>
                 <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wide rounded-full border border-green-100">
@@ -123,11 +133,11 @@ const DoctorDetails = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Staff Link ID</p>
-                 <p className="text-lg font-mono font-bold text-slate-700 mt-1">{doctorData.StaffID || "N/A"}</p>
+                 <p className="text-lg font-mono font-bold text-slate-700 mt-1">{doctorData.StaffID && doctorData.StaffID.length > 0 ? doctorData.StaffID.toString() : "N/A"}</p>
                </div>
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Student Link ID</p>
-                 <p className="text-lg font-mono font-bold text-slate-700 mt-1">{doctorData.StudentID || "N/A"}</p>
+                 <p className="text-lg font-mono font-bold text-slate-700 mt-1">{doctorData.StudentID && doctorData.StudentID.length > 0 ? doctorData.StudentID.toString() : "N/A"}</p>
                </div>
                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                  <p className="text-xs text-slate-400 font-medium uppercase">Hospital ID</p>
@@ -188,7 +198,7 @@ const DoctorDetails = () => {
                   Edit Profile
                 </button>
                 <button 
-                  onClick={handleDelete}
+                  onClick={()=>{handleDelete(id)}}
                   className="w-full flex items-center justify-center gap-2 py-2 bg-white text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-all duration-300 shadow-sm transform hover:scale-105 active:scale-95"
                 >
                   <Trash2 className="w-4 h-4" />

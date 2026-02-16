@@ -71,7 +71,7 @@ const OPDMaster = () => {
   
   useEffect(
       ()=>{
-        fetch("http://localhost:3000/api/opds/")
+        fetch("http://localhost:3000/api/opds/", {credentials:'include'})
         .then((res)=>res.json())
         .then((json)=>{console.log(json);setOpdList(json)})
       }

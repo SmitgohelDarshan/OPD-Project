@@ -56,7 +56,7 @@ const TreatmentTypeMaster = () => {
   const [treatmentList, setTreatmentList] = useState([])
     useEffect(
           ()=>{
-            fetch("http://localhost:3000/api/treatments/")
+            fetch("http://localhost:3000/api/treatments/", {credentials:'include'})
             .then((res)=>res.json())
             .then((json)=>setTreatmentList(json))
           }

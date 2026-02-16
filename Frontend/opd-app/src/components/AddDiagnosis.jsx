@@ -34,7 +34,7 @@ const AddDiagnosis = () => {
     if (id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/diagnosistypes/${id}`);
+          const response = await fetch(`http://localhost:3000/api/diagnosistypes/${id}`,{credentials:'include'});
           const data = await response.json();
           setFormData(data[0]); // Fill the form with existing data
         } catch (err) {
@@ -64,7 +64,7 @@ const AddDiagnosis = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/diagnosistypes/update/" + id,
+          "http://localhost:3000/api/diagnosistypes/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -92,7 +92,7 @@ const AddDiagnosis = () => {
         // Example API call:
         console.log(addData);
         const response = await fetch(
-          "http://localhost:3000/api/diagnosistypes/register",
+          "http://localhost:3000/api/diagnosistypes/register", {credentials:'include'},
           {
             method: "POST",
             headers: {

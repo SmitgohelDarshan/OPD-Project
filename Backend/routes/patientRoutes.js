@@ -1,21 +1,21 @@
-const express = require('express');
+const express=require("express");
+const { getAllPatients, getPatientById,getPatientByEmail, registerPatient, updatePatient, deletePatient } = require("../controllers/patientController");
+const validate = require("../middlewares/validate");
+const registerSchema = require("../validations/patientValidation");
 
-const validate = require('../middlewares/validate');
+const router=express.Router();
 
-const registerSchema = require('../validations/patientValidation');
+router.get('/',getAllPatients)
 
-const { getAllPatients, getPatientById, registerPatient, updatePatient, deletePatient} = require('../controllers/patientController')
+router.post('/email',getPatientByEmail)
 
-const router = express.Router();
+router.get('/:id',getPatientById)
 
-router.get('/', getAllPatients);
 
-router.get('/:id', getPatientById);
+router.post('/register',validate(registerSchema),registerPatient)
 
-router.post('/register', validate(registerSchema), registerPatient);
+router.put('/update/:id',validate(registerSchema),updatePatient)
 
-router.put('/update/:id', validate(registerSchema), updatePatient);
+router.delete('/delete/:id',deletePatient)
 
-router.delete('/delete/:id', validate(registerSchema), deletePatient);
-
-module.exports = router
+module.exports=router

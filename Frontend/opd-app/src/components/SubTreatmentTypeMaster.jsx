@@ -25,7 +25,7 @@ const SubTreatmentTypeMaster = () => {
 
   useEffect(
         ()=>{
-          fetch("http://localhost:3000/api/subtreatments/")
+          fetch("http://localhost:3000/api/subtreatments/", {credentials:'include'})
           .then((res)=>res.json())
           .then((json)=>setSubTreatmentList(json))
         }

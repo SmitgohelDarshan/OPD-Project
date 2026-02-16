@@ -25,7 +25,7 @@ const StaffMaster = () => {
 
    useEffect(
         ()=>{
-          fetch("http://localhost:3000/api/staffs/")
+          fetch("http://localhost:3000/api/staffs/", {credentials:'include'})
           .then((res)=>res.json())
           .then((json)=>setStaffList(json))
         }

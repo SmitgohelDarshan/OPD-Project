@@ -7,7 +7,7 @@ const signupUser = async (req, res) => {
 
         const savedUser = await newUser.save();
 
-        return res.status(201).send(savedUser);
+        return res.status(201).json(savedUser);
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
 
     const user = await User.find({ Email: Email, Role:Role });
     console.log(user);
-    if (user && user.length > 0) {
+    if (user && user.length>0) {
         const match = await bcrypt.compare(Password, user[0].Password);
 
         if (match) {
@@ -29,16 +29,17 @@ const loginUser = async (req, res) => {
             );
 
             res.cookie("token", token, {
-                httpOnly: true, // Prevents XSS attacks
+                httpOnly:true,
                 secure: process.env.NODE_ENV === "production", // Use HTTPS in production
                 sameSite: "strict", // Prevents CSRF attacks
                 maxAge: 24 * 60 * 60 * 1000, // 1 day
             });
 
-            return res.status(200).json({ message: "Login Successful", data: user });
+            return res.status(201).json({ message: "Login Successful", data: user });
         }
         else
         {
+            // console.log("invalid email or password")
             return res.status(401).json({ message: "Invalid email or password" });
         }
     } else {
@@ -49,11 +50,6 @@ const loginUser = async (req, res) => {
 const logoutUser = (req, res) => {
     res.clearCookie('token')
     return res.status(201).json({ message: "Logged out successfully" });
-    // res.cookie("token", "", {
-    //     httpOnly: true,
-    //     expires: new Date(0), // Expire the cookie immediately
-    // });
-    // res.status(200).json({ message: "Logged out successfully" });
 };
 
 const handleMe=async(req,res)=>{
@@ -89,7 +85,7 @@ const handleMe=async(req,res)=>{
             authenticated: false, 
             message: "Session expired or invalid" 
             });
-        }
+            }
 }
 
-module.exports = { signupUser, loginUser, logoutUser, handleMe };
+module.exports = { signupUser, loginUser, logoutUser,handleMe };

@@ -1,67 +1,3 @@
-// import React, { useContext } from 'react';
-// import {
-//   Search,
-//   Filter,
-//   Plus,
-//   Edit,
-//   Trash2,
-//   Eye,
-//   Download,
-//   MoreVertical,
-//   ChevronLeft,
-//   ChevronRight,
-//   FileText,
-//   Calendar
-// } from 'lucide-react';
-// import { SidebarContext } from '../contexts/Sidebar';
-// import { Link } from 'react-router-dom';
-
-// const DiagnosisTypes = () => {
-
-//   const{expanded}=useContext(SidebarContext)
-
-//   return (
-//    <div className={`relative ${expanded? "ml-64" : "ml-16"} flex-1 bg-blue-200 transition-all duration-1000`}>
-//       <div className={`relative pt-[270px] p-[135px] pb-0 w-2/3   h-[1000px] mx-auto `}>
-//         <p className={`text-9xl text-gray-800 font-extrabold font-sans top-[175px] left-[65px]  absolute opacity-90`} >01</p>
-//         <Link to='/admin/1/getDiagnosisType/1'>
-//         <div className={`sticky  top-[270px]  bg-white   justify-center items-center px-28 py-1 border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgb(0,0,0)]`}>
-//           <p className={`font-extrabold text-3xl m-4 text-center`}>Cardiovascular</p>
-//           <p className={`font-light  m-2 text-center`}>Premier facility for general medicine and surgery</p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Hospital Name: Civil Hospital </p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Short Diagnosis Name: CARDIO</p>
-//         </div>
-//         </Link>
-//       </div>
-//       <div className={`relative pt-[270px] p-[135px] pb-0 w-2/3   h-[1000px] mx-auto `}>
-//         <p className={`text-9xl text-gray-800 font-extrabold font-sans top-[175px] left-[65px]  absolute opacity-90`} >02</p>
-//         <Link to='/admin/1/getDiagnosisType/1'>
-//         <div className={`sticky  top-[270px]  bg-white   justify-center items-center px-28 py-1 border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgb(0,0,0)]`}>
-//           <p className={`font-extrabold text-3xl m-4 text-center`}>Cardiovascular</p>
-//           <p className={`font-light  m-2 text-center`}>Premier facility for general medicine and surgery</p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Hospital Name: Civil Hospital </p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Short Diagnosis Name: CARDIO</p>
-//         </div>
-//         </Link>
-//       </div>
-//       <div className={`relative pt-[270px] p-[135px] pb-0 w-2/3   h-[1000px] mx-auto `}>
-//         <p className={`text-9xl text-gray-800 font-extrabold font-sans top-[175px] left-[65px]  absolute opacity-90`} >03</p>
-//         <Link to='/admin/1/getDiagnosisType/1'>
-//         <div className={`sticky  top-[270px]  bg-white   justify-center items-center px-28 py-1 border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgb(0,0,0)]`}>
-//           <p className={`font-extrabold text-3xl m-4 text-center`}>Cardiovascular</p>
-//           <p className={`font-light  m-2 text-center`}>Premier facility for general medicine and surgery</p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Hospital Name: Civil Hospital </p>
-//           <p className={`text-2xl font-bold m-2 text-center`}>Short Diagnosis Name: CARDIO</p>
-//         </div>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DiagnosisTypes;
-
-
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { SidebarContext } from '../contexts/Sidebar';
@@ -128,7 +64,7 @@ const DiagnosisTypeMaster = () => {
     
       useEffect(
         ()=>{
-          fetch("http://localhost:3000/api/diagnosistypes/")
+          fetch("http://localhost:3000/api/diagnosistypes/", {credentials:'include'})
           .then((res)=>res.json())
           .then((json)=>setDiagnosisList(json))
         }

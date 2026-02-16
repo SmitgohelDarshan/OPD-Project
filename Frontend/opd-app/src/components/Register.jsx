@@ -37,7 +37,7 @@ const Register = () => {
                 console.log("Registering User...", addData);
                 // After registration logic, navigate to login or dashboard
 
-                const res = await fetch("http://localhost:3000/api/signup", {
+                const res = await fetch("http://localhost:3000/api/signup",{credentials:'include'}, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

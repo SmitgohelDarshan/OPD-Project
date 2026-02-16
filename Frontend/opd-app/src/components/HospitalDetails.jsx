@@ -1,106 +1,4 @@
-// import React, { useContext } from 'react'
-// import { SidebarContext } from '../contexts/Sidebar'
-
-
-// function HospitalDetails() {
-//   const {expanded}=useContext(SidebarContext)
-//   return (
-//     <div className={` flex-1 ${expanded? "ml-64":"ml-16"}  transition-all duration-1000 items-center justify-center flex `}>
-//         <div  className={` my-10 mx-28  border-6 border-black p-8 group transition-all duration-500 `}>
-//         <div className={`font-extrabold text-5xl text-center my-8`}>
-//           <span>
-//               Civil Hospital
-//               <div className={`w-full h-[3px] bg-black group-hover:w-0 transition-all duration-500 `}></div> 
-//           </span>
-//           </div>
-//           <div className={`rounded-lg border border-2 border-gray-300 bg-blue-50 `}>
-//           <table className={`table-auto `}>
-//             <thead>
-//               <tr className={`border border-0 border-b-4 border-b-gray-500`}>
-//                 <th className={`text-3xl p-4`}>Field</th>
-//                 <th className={`text-3xl p-4`}>Value</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               <tr>
-//                 <td className={`font-bold p-2`}>Hospital ID: </td>
-//                 <td className={`py-2 px-28`}>1</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Default Payment Mode ID: </td>
-//                 <td className={`py-2 px-28`}>1</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Registration Charge: </td>
-//                 <td className={`py-2 px-28`}>500</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Registration Validity Months: </td>
-//                 <td className={`py-2 px-28`}>6</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Opening date: </td>
-//                 <td className={`py-2 px-28`}>30-12-2025</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Opening Patient No: </td>
-//                 <td className={`py-2 px-28`}>5001</td>
-//               </tr>
-
-//                <tr>
-//                 <td className={`font-bold p-2`}>Opening OPD No: </td>
-//                 <td className={`py-2 px-28`}>51</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Opening Receipt No: </td>
-//                 <td className={`py-2 px-28`}>501</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Description: </td>
-//                 <td className={`py-2 px-28`}>The Civil Hospital is a prominent, state-run multi-specialty medical facility serving as the backbone of public healthcare for the region. Dedicated to providing affordable and accessible medical services to all socio-economic groups, it operates as a 24/7 tertiary care center.</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>UserID: </td>
-//                 <td className={`py-2 px-28`}>1</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Created: </td>
-//                 <td className={`py-2 px-28`}>30-12-2025</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Modified: </td>
-//                 <td className={`py-2 px-28`}>30-12-2025</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Address: </td>
-//                 <td className={`py-2 px-28`}>Junagadh</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Is rate enable in receipt: </td>
-//                 <td className={`py-2 px-28`}>Yes</td>
-//               </tr>
-//                <tr>
-//                 <td className={`font-bold p-2`}>Is Registration Fee Enable in OPD: </td>
-//                 <td className={`py-2 px-28`}>Yes</td>
-//               </tr>
-//               </tbody>
-//           </table>
-//           </div>
-//         <div className={`flex justify-center my-5`}>
-//         <button className={`px-6 mx-1 py-4 border-2 border-black text-2xl bg-black text-white font-bold cursor-pointer hover:bg-[#5ad641] hover:text-black`} >EDIT</button>
-//         <button className={`px-6 py-4 border-2 border-black text-2xl bg-black text-white font-bold cursor-pointer hover:bg-red-600 hover:text-black`} >DELETE</button>
-//         </div>
-//         </div>
-//     </div>
-//   )
-// }
-
-// export default HospitalDetails
-
-
-
-import React, { useContext, useEffect, useState } from 'react';
-import { SidebarContext } from '../contexts/Sidebar';
+import React, { useContext, useEffect, useState } from 'react';import { SidebarContext } from '../contexts/Sidebar';
 import { 
   Building2, 
   MapPin, 
@@ -131,7 +29,7 @@ function HospitalDetails() {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/hospitals/${id}`);
+      const response = await fetch(`http://localhost:3000/api/hospitals/${id}`, {credentials:'include'});
       const data = await response.json();
       setHospitalData(data[0]);
     } catch (err) {
@@ -150,7 +48,7 @@ const handleDelete = async(id) => {
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/hospitals/delete/${id}`,{
           method:'DELETE'
-        })
+        }, {credentials:'include'})
 
         if (!req==201) {
         throw new Error('Failed to delete the record from the server');

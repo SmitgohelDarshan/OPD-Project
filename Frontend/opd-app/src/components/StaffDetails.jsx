@@ -36,7 +36,7 @@ const StaffDetails = () => {
   useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/staffs/${id}`);
+      const response = await fetch(`http://localhost:3000/api/staffs/${id}`, {credentials:'include'});
       const data = await response.json();
       setStaffData(data[0]);
     } catch (err) {
@@ -63,7 +63,7 @@ const StaffDetails = () => {
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/staffs/delete/${id}`,{
           method:'DELETE'
-        })
+        }, {credentials:'include'})
 
         if (!req.status==201) {
         throw new Error('Failed to delete the record from the server');

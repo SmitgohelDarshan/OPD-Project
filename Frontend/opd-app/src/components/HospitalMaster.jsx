@@ -75,7 +75,7 @@ const HospitalMaster = () => {
 
   useEffect(
     ()=>{
-      fetch("http://localhost:3000/api/hospitals/")
+      fetch("http://localhost:3000/api/hospitals/", {credentials:'include'})
       .then((res)=>res.json())
       .then((json)=>setHospitalList(json))
     }

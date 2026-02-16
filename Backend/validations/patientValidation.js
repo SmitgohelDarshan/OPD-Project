@@ -2,6 +2,7 @@ const Joi = require('joi')
 
 const registerSchema = Joi.object({
     PatientID: Joi.number().positive(),
+    Email:Joi.string().required(),
     PatientName: Joi.string().max(250).required(),
     PatientNo: Joi.number().positive().required(),
     RegistrationDateTime: Joi.date().required(),

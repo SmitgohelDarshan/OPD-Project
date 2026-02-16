@@ -25,7 +25,7 @@ const DiagnosisTypeDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/diagnosistypes/${id}`);
+        const response = await fetch(`http://localhost:3000/api/diagnosistypes/${id}`, {credentials:'include'});
         const data = await response.json();
         setDiagnosisData(data[0]);
       } catch (err) {
@@ -53,7 +53,7 @@ const DiagnosisTypeDetails = () => {
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/diagnosistypes/delete/${id}`,{
           method:'DELETE'
-        })
+        }, {credentials:'include'})
 
         if (!req==201) {
         throw new Error('Failed to delete the record from the server');

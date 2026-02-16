@@ -213,3 +213,55 @@ function App() {
 }
 
 export default App;
+
+/* import React, { useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+
+function ProtectedRoute({isLoggedIn,children}){
+    
+    if(!isLoggedIn)
+    {
+      return <Navigate to='/' replace />
+      
+    }
+    return children
+}
+
+function Login({onLogin}){
+  const navigate=useNavigate();
+  return(
+    <>
+      <p>You have to login!</p>
+      <button onClick={()=>{onLogin();
+        navigate('/dashboard');
+      }}>Login</button>
+    </>
+  )
+}
+
+function Dashboard({onLogout})
+{
+  return(
+    <>
+      <p>You are already logged in!</p>
+      <button onClick={()=>{onLogout()}}>Logout</button>
+    </>
+  )
+}
+
+
+export default function App(){
+
+  const[isLoggedIn,setIsLoggedIn]=useState(false);
+  return(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login onLogin={()=>{setIsLoggedIn(true)}}/>}/>
+        <Route path="/dashboard"
+            element={<ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Dashboard onLogout={()=>{setIsLoggedIn(false)}}/>
+            </ProtectedRoute>}/>
+      </Routes>
+    </BrowserRouter>
+  )
+} */

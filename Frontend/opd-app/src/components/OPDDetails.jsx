@@ -26,7 +26,7 @@ const OPDDetails =  () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/opds/${id}`);
+      const response = await fetch(`http://localhost:3000/api/opds/${id}`, {credentials:'include'});
       const data = await response.json();
       setOpdData(data[0]);
     } catch (err) {
@@ -54,7 +54,7 @@ useEffect(() => {
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/opds/delete/${id}`,{
           method:'DELETE'
-        })
+        }, {credentials:'include'})
 
         if (!req==201) {
         throw new Error('Failed to delete the record from the server');

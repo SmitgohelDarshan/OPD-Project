@@ -29,7 +29,7 @@ const ReceiptMasterAdmin = () => {
 
   useEffect(
         ()=>{
-          fetch("http://localhost:3000/api/receipts/")
+          fetch("http://localhost:3000/api/receipts/", {credentials:'include'})
           .then((res)=>res.json())
           .then((json)=>{console.log(json);setReceiptList(json)})
         }

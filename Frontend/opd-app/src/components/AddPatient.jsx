@@ -44,7 +44,7 @@ const AddPatient = () => {
 
   if(id){
         useEffect(()=>{
-          fetch('http://localhost:3000/api/patients/'+id)
+          fetch('http://localhost:3000/api/patients/'+id), {credentials:'include'}
           .then((res)=>res.json())
           .then((json)=>setFormData(json[0]))
         },[])
@@ -73,7 +73,7 @@ const AddPatient = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/patients/update/" + id,
+          "http://localhost:3000/api/patients/update/" + id, {credentials:'include'},
           {
             method: "PUT",
             headers: {
@@ -100,7 +100,7 @@ const AddPatient = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/patients/register",
+          "http://localhost:3000/api/patients/register", {credentials:'include'},
           {
             method: "POST",
             headers: {
