@@ -1,5 +1,5 @@
 const express=require("express");
-const { getAllReceipts, getReceiptById, registerReceipt, updateReceipt, deleteReceipt } = require("../controllers/receiptController");
+const { getAllReceipts, getReceiptById, registerReceipt, updateReceipt, deleteReceipt, getAllReceiptsBystaff } = require("../controllers/receiptController");
 const validate = require("../middlewares/validate");
 const registerSchema = require("../validations/receiptValidation");
 
@@ -7,9 +7,14 @@ const router=express.Router();
 
 router.get('/',getAllReceipts)
 
-router.get('/:id',getReceiptById)
+router.post('/bystaff', getAllReceiptsBystaff)
+
 
 router.post('/register',validate(registerSchema),registerReceipt)
+
+
+
+router.get('/:id',getReceiptById)
 
 router.put('/update/:id',validate(registerSchema),updateReceipt)
 

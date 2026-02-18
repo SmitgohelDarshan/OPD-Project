@@ -1,21 +1,24 @@
-const express = require('express')
+const express=require("express")
 
-const registerSchema = require('../validations/opdValidation');
 
-const { registerOPD, getAllOPDs, getOPDById, updateOPD, deleteOPD} = require('../controllers/opdController');
+const registerSchema = require("../validations/opdValidation");
 
-const validate = require('../middlewares/validate');
+const { registerOPD, getAllOPDs, getOPDById, updateOPD, deleteOPD, getAllVisits } = require("../controllers/opdController");
 
-const router = express.Router();
+const validate = require("../middlewares/validate");
 
-router.post('/register', validate(registerSchema), registerOPD);
+const router=express.Router()
 
-router.get('/', getAllOPDs);
+router.post("/register",validate(registerSchema),registerOPD);
 
-router.get('/:id', getOPDById);
+router.get("/",getAllOPDs);
 
-router.put('/update/:id', validate(registerSchema), updateOPD);
+router.get("/visits/:id",getAllVisits)
 
-router.delete('/delete/:id', deleteOPD);
+router.get("/:id",getOPDById);
 
-module.exports = router;
+router.put("/update/:id",validate(registerSchema),updateOPD);
+
+router.delete("/delete/:id",deleteOPD);
+
+module.exports=router;

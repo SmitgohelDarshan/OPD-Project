@@ -16,61 +16,38 @@ import {
   Edit2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuth } from '../contexts/UseAuth';
 
 const ReceiptMasterStaff = () => {
   // --- Context for Sidebar Transition ---
   const { expanded } = useContext(SidebarContext);
-
-  // --- Staff Context (Simulated) ---
-  const currentHospital = "City Care General Hospital"; 
-
+  const {user} = useAuth();
+  console.log("Smit",user);
   // --- State Management ---
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Initial Data (Filtered to only show 'City Care General Hospital' data)
-  // Added 'PatientName' as it is critical for staff to identify receipts
-  const [receiptList, setReceiptList] = useState([
-    {
-      ReceiptID: 501,
-      ReceiptNo: "REC-2025-001",
-      ReceiptDate: "2025-01-10",
-      PatientName: "Rahul Verma", // Added for Staff usability
-      AmountPaid: 1500,
-      PaymentMode: "UPI",
-      ReferenceNo: "UPI-99887766",
-      ReferenceDate: "2025-01-10"
-    },
-    {
-      ReceiptID: 505,
-      ReceiptNo: "REC-2025-005",
-      ReceiptDate: "2025-01-13",
-      PatientName: "Sita Devi",
-      AmountPaid: 2500,
-      PaymentMode: "Debit Card",
-      ReferenceNo: "TXN-DC-554433",
-      ReferenceDate: "2025-01-13"
-    },
-    {
-      ReceiptID: 508,
-      ReceiptNo: "REC-2025-008",
-      ReceiptDate: "2025-01-13",
-      PatientName: "Amit Patel",
-      AmountPaid: 450,
-      PaymentMode: "Cash",
-      ReferenceNo: "N/A",
-      ReferenceDate: "2025-01-13"
-    },
-    {
-      ReceiptID: 512,
-      ReceiptNo: "REC-2025-012",
-      ReceiptDate: "2025-01-14",
-      PatientName: "Vikram Singh",
-      AmountPaid: 1200,
-      PaymentMode: "UPI",
-      ReferenceNo: "UPI-11223344",
-      ReferenceDate: "2025-01-14"
+  const [receiptList, setReceiptList] = useState([]);
+
+  useEffect(() => {
+  const getReceipts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/receipts/bystaff", {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(user),
+        credentials:'include'
+      });
+      const data = await response.json();
+      console.log("data",data)
+      setReceiptList(data);
+    } catch (err) {
+      console.log("Error fetching receipts:", err);
     }
-  ]);
+  };
+
+  getReceipts();
+}, [user]);
 
   // Filter by Receipt No or Patient Name
   const filteredReceipts = receiptList.filter(item => 
@@ -85,10 +62,6 @@ const ReceiptMasterStaff = () => {
       {/* --- Page Header --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div>
-          <div className="flex items-center gap-2 text-blue-600 mb-1">
-             <Building2 className="w-4 h-4" />
-             <span className="text-xs font-bold uppercase tracking-wider">{currentHospital}</span>
-          </div>
           <h1 className="text-2xl font-bold text-slate-900">Receipts Management</h1>
           <p className="text-sm text-slate-500">View, print, and manage patient billing records.</p>
         </div>
@@ -176,7 +149,7 @@ const ReceiptMasterStaff = () => {
                             </div>
                             <span className="inline-flex items-center w-max gap-1 px-2 py-0.5 rounded bg-gray-100 text-slate-600 text-[10px] font-medium border border-gray-200 uppercase">
                                 <CreditCard className="w-3 h-3" />
-                                {receipt.PaymentMode}
+                                {receipt.PaymentModeID}
                             </span>
                        </div>
                     </td>

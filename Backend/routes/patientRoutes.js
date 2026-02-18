@@ -1,5 +1,5 @@
 const express=require("express");
-const { getAllPatients, getPatientById,getPatientByEmail, registerPatient, updatePatient, deletePatient } = require("../controllers/patientController");
+const { getAllPatients, getPatientById,getPatientByEmail, registerPatient, updatePatient, deletePatient, getPatientByStaff } = require("../controllers/patientController");
 const validate = require("../middlewares/validate");
 const registerSchema = require("../validations/patientValidation");
 
@@ -9,8 +9,9 @@ router.get('/',getAllPatients)
 
 router.post('/email',getPatientByEmail)
 
-router.get('/:id',getPatientById)
+router.post('/bystaff',getPatientByStaff)
 
+router.get('/:id',getPatientById)
 
 router.post('/register',validate(registerSchema),registerPatient)
 

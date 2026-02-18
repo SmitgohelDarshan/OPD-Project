@@ -57,6 +57,7 @@ import AddStaff from "./components/AddStaff";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
+import PatientMasterStaff from "./components/PatientMasterStaff";
 
 function App() {
 
@@ -191,6 +192,12 @@ function App() {
                         <Route path="/staff/addReceipt" element={<AddReceipt />} />
                         <Route path="/staff/editReceipt/:id" element={<ReceiptDetails />} />
                         <Route path="/staff/deleteReceipt/:id" element={<ReceiptDetails />} />
+
+                        <Route path="/staff/getAllPatients" element={<PatientMasterStaff />} />
+                        {/* <Route path="/staff/getPatient/:id" element={<PatientDetailsStaff />} />
+                        <Route path="/staff/addPatient" element={<AddPatientStaff />} />
+                        <Route path="/staff/editPatient/:id" element={<PatientDetailsStaff />} />
+                        <Route path="/staff/deletePatient/:id" element={<PatientDetailsStaff />} /> */}
                       
                     </Route>
 

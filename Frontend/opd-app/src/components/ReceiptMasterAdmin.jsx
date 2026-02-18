@@ -21,6 +21,7 @@ const ReceiptMasterAdmin = () => {
   // --- Context for Sidebar Transition ---
   const { expanded } = useContext(SidebarContext);
 
+
   // --- State Management ---
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -34,9 +35,6 @@ const ReceiptMasterAdmin = () => {
           .then((json)=>{console.log(json);setReceiptList(json)})
         }
       ,[])
-
-  // --- Handlers ---
-  
 
   // Filter by Receipt No or Hospital Name
   const filteredReceipts = receiptList.filter(item => 

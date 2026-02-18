@@ -10,8 +10,9 @@ function StaffMainHeader() {
     <>
         <Header>
             <Link to='/staff/dashboard'><SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" /></Link>  
-            
             <Link to='/staff/getAllReceipts'><SidebarItem icon={<ClipboardList size={20}/>} text="Receipt" /></Link>
+            <Link to='/staff/getAllPatients'><SidebarItem icon={<Users size={20}/>} text="Patients" /></Link>
+
         </Header>
         
     </>

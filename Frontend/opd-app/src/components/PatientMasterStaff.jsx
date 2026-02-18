@@ -15,71 +15,36 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useAuth } from '../contexts/UseAuth';
 
-const PatientMaster = () => {
+
+const PatientMasterStaff = () => {
   // --- Context for Sidebar Transition ---
   const { expanded } = useContext(SidebarContext);
-
-  // --- State Management ---
+  const {user} = useAuth();
+  console.log("Smit",user);
+  
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Initial Data (Mapped to your specific field names)
-  // const [patientList, setPatientList] = useState([
-  //   {
-  //     PatientID: 1001,
-  //     PatientName: "Rahul Verma",
-  //     Age: 34,
-  //     BloodGroup: "O+",
-  //     Gender: "Male",
-  //     HospitalName: "City Care General Hospital",
-  //     MobileNo: "9876543210"
-  //   },
-  //   {
-  //     PatientID: 1002,
-  //     PatientName: "Priya Das",
-  //     Age: 28,
-  //     BloodGroup: "A-",
-  //     Gender: "Female",
-  //     HospitalName: "Sunrise Multispeciality",
-  //     MobileNo: "9988776655"
-  //   },
-  //   {
-  //     PatientID: 1003,
-  //     PatientName: "Amit Patel",
-  //     Age: 45,
-  //     BloodGroup: "B+",
-  //     Gender: "Male",
-  //     HospitalName: "Sterling Hospital",
-  //     MobileNo: "8877665544"
-  //   },
-  //   {
-  //     PatientID: 1004,
-  //     PatientName: "Sita Devi",
-  //     Age: 62,
-  //     BloodGroup: "AB+",
-  //     Gender: "Female",
-  //     HospitalName: "City Care General Hospital",
-  //     MobileNo: "7766554433"
-  //   },
-  //   {
-  //     PatientID: 1005,
-  //     PatientName: "Vikram Singh",
-  //     Age: 12,
-  //     BloodGroup: "O-",
-  //     Gender: "Male",
-  //     HospitalName: "Apex Heart Institute",
-  //     MobileNo: "9123456789"
-  //   }
-  // ]);
   const [patientList, setPatientList] = useState([])
 
+  if(user){
   useEffect(
         ()=>{
-          fetch("http://localhost:3000/api/patients/", {credentials:'include'})
+          fetch("http://localhost:3000/api/patients/bystaff", {
+            credentials:'include',
+            method:'POST',
+            headers:{
+              'Content-type':'application/json'
+            },
+            body:JSON.stringify(user)
+          })
           .then((res)=>res.json())
-          .then((json)=>setPatientList(json))
+          .then((json)=>{
+            console.log(json)
+            setPatientList(json)})
         }
       ,[])
+  }
 
   // Filter by Name or Mobile Number
   const filteredPatients = patientList.filter(patient => 
@@ -238,4 +203,4 @@ const PatientMaster = () => {
   );
 };
 
-export default PatientMaster;
+export default PatientMasterStaff;
