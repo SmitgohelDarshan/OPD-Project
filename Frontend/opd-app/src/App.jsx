@@ -58,6 +58,9 @@ import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
 import PatientMasterStaff from "./components/PatientMasterStaff";
+import PatientDetailsStaff from "./components/PatientDetailsStaff";
+import OPDMasterStaff from "./components/OPDMasterStaff";
+import OPDDetailsStaff from "./components/OPDDetailsStaff";
 
 function App() {
 
@@ -194,10 +197,13 @@ function App() {
                         <Route path="/staff/deleteReceipt/:id" element={<ReceiptDetails />} />
 
                         <Route path="/staff/getAllPatients" element={<PatientMasterStaff />} />
-                        {/* <Route path="/staff/getPatient/:id" element={<PatientDetailsStaff />} />
-                        <Route path="/staff/addPatient" element={<AddPatientStaff />} />
-                        <Route path="/staff/editPatient/:id" element={<PatientDetailsStaff />} />
+                        <Route path="/staff/getPatient/:id" element={<PatientDetailsStaff />} />
+                        {/* <Route path="/staff/addPatient" element={<AddPatientStaff />} /> */}
+                        {/*<Route path="/staff/editPatient/:id" element={<PatientDetailsStaff />} />
                         <Route path="/staff/deletePatient/:id" element={<PatientDetailsStaff />} /> */}
+
+                        <Route path="/staff/getAllOPDs" element={<OPDMasterStaff />} />
+                        <Route path="/staff/getOPD/:id" element={<OPDDetailsStaff />} />
                       
                     </Route>
 

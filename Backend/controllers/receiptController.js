@@ -94,13 +94,15 @@ const getAllReceiptsBystaff=async(req,res)=>{
                     PaymentModeID: "$receiptsDetails.PaymentModeID",
                     ReferenceNo: "$receiptsDetails.ReferenceNo",
                     ReferenceDate: "$receiptsDetails.ReferenceDate",
+                    cancellationDateTime: "$receiptsDetails.cancellationDateTime",
+
                 }
             }
         ])
         console.log(result)
-        if (result.length === 0) {
-            return res.status(404).json({ message: "Staff email not found or no Receipt assigned to this hospital." });
-        }
+        // if (result.length === 0) {
+        //     return res.status(404).json({ message: "Staff email not found or no Receipt assigned to this hospital." });
+        // }
 
         return res.status(200).json(result);
     } catch (error) {

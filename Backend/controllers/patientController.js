@@ -60,9 +60,9 @@ const getPatientByStaff=async(req,res)=>{
             }
         ])
 
-        if (result.length === 0) {
-            return res.status(404).json({ message: "Staff email not found or no patients assigned to this hospital." });
-        }
+        // if (result.length === 0) {
+        //     return res.status(404).json({ message: "Staff email not found or no patients assigned to this hospital." });
+        // }
 
         // result[0] contains the staff info + their specific hospital's patients
         return res.status(200).json(result);

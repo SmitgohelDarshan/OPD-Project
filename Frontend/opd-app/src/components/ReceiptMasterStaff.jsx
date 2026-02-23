@@ -113,7 +113,7 @@ const ReceiptMasterStaff = () => {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredReceipts.length > 0 ? (
-                filteredReceipts.map((receipt,i) => (
+                filteredReceipts.map((receipt) => (
                   <tr key={receipt.ReceiptID} className="hover:bg-blue-50/30 transition-colors group">
                     
                     {/* Receipt Details (No & Date) */}
@@ -172,7 +172,7 @@ const ReceiptMasterStaff = () => {
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         
                         {/* VIEW ACTION */}
-                        <Link to={'/staff/getReceipt/'+i}>
+                        <Link to={`/staff/getReceipt/${receipt.ReceiptID}`}>
                         <button className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded transition-colors" title="View Receipt">
                           <Eye className="w-4 h-4" />
                         </button>

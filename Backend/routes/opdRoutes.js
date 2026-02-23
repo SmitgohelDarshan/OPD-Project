@@ -3,7 +3,7 @@ const express=require("express")
 
 const registerSchema = require("../validations/opdValidation");
 
-const { registerOPD, getAllOPDs, getOPDById, updateOPD, deleteOPD, getAllVisits } = require("../controllers/opdController");
+const { registerOPD, getAllOPDs, getOPDById, updateOPD, deleteOPD, getAllVisits, getOPDByStaff } = require("../controllers/opdController");
 
 const validate = require("../middlewares/validate");
 
@@ -12,6 +12,8 @@ const router=express.Router()
 router.post("/register",validate(registerSchema),registerOPD);
 
 router.get("/",getAllOPDs);
+
+router.post('/bystaff',getOPDByStaff)
 
 router.get("/visits/:id",getAllVisits)
 
