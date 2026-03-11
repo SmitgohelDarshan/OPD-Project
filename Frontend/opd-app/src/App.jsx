@@ -123,7 +123,7 @@ function App() {
                         <Route path="/admin/getAllHospitals" element={<HospitalMaster />} />
                         <Route path="/admin/getHospital/:id" element={<HospitalDetails />} />
                         <Route path="/admin/addHospital" element={<AddHospital/>} />
-                        <Route path="/admin/editHospital/:id" element={<HospitalDetails />} />
+                        <Route path="/admin/editHospital/:id" element={<AddHospital />} />
                         <Route path="/admin/deleteHospital/:id" element={<HospitalDetails />} />
 
 
@@ -143,40 +143,40 @@ function App() {
                           <Route path="/admin/getAllTreatments" element={<TreatmentTypeMaster />} />
                           <Route path="/admin/getTreatment/:id" element={<TreatmentTypeDetails/>} />
                           <Route path="/admin/addTreatmentType" element={<AddTreatmentType />} />
-                          <Route path="/admin/editTreatment/:id" element={<TreatmentTypeDetails />} />
+                          <Route path="/admin/editTreatment/:id" element={<AddTreatmentType />} />
                           <Route path="/admin/deleteTreatment/:id" element={<TreatmentTypeDetails />} />
 
                           <Route path="/admin/getAllDiagnosisTypes" element={<DiagnosisTypeMaster />} />
                           <Route path="/admin/getDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
                           <Route path="/admin/addDiagnosisType" element={<AddDiagnosis/>} />
-                          <Route path="/admin/editDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
+                          <Route path="/admin/editDiagnosisType/:id" element={<AddDiagnosis />} />
                           <Route path="/admin/deleteDiagnosisType/:id" element={<DiagnosisTypeDetails />} />
 
                           <Route path="/admin/getAllSubTreatments" element={<SubTreatmentTypeMaster />} />
                           <Route path="/admin/getSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
                           <Route path="/admin/addSubTreatment" element={<AddSubTreatmentType />} />
-                          <Route path="/admin/editSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
+                          <Route path="/admin/editSubTreatment/:id" element={<AddSubTreatmentType />} />
                           <Route path="/admin/deleteSubTreatment/:id" element={<SubTreatmentTypeDetails />} />
 
                         
                         <Route path="/admin/getAllPatients" element={<PatientMaster />} />
                         <Route path="/admin/getPatient/:id" element={<PatientDetails />} />
                         <Route path="/admin/addPatient" element={<AddPatient />} />
-                        <Route path="/admin/editPatient/:id" element={<PatientDetails />} />
+                        <Route path="/admin/editPatient/:id" element={<AddPatient />} />
                         <Route path="/admin/deletePatient/:id" element={<PatientDetails />} />
 
 
                         <Route path="/admin/getAllOPDs" element={<OPDMaster />} />
                         <Route path="/admin/getOPD/:id" element={<OPDDetails />} />
                         <Route path="/admin/addOPD" element={<AddOPD/>} />
-                        <Route path="/admin/editOPD/:id" element={<OPDDetails />} />
+                        <Route path="/admin/editOPD/:id" element={<AddOPD />} />
                         <Route path="/admin/deleteOPD/:id" element={<OPDDetails />} />
 
 
                         <Route path="/admin/getAllReceipts" element={<ReceiptMasterAdmin />} />
                         <Route path="/admin/getReceipt/:id" element={<ReceiptDetailsAdmin />} />
                         <Route path="/admin/addReceipt" element={<AddReceipt />} />
-                        <Route path="/admin/editReceipt/:id" element={<ReceiptDetails />} />
+                        <Route path="/admin/editReceipt/:id" element={<AddReceipt />} />
                         <Route path="/admin/deleteReceipt/:id" element={<ReceiptDetails />} />
                     
                     </Route>
@@ -193,17 +193,18 @@ function App() {
                         <Route path="/staff/getAllReceipts" element={<ReceiptMasterStaff />} />
                         <Route path="/staff/getReceipt/:id" element={<ReceiptDetailsStaff />} />
                         <Route path="/staff/addReceipt" element={<AddReceipt />} />
-                        <Route path="/staff/editReceipt/:id" element={<ReceiptDetails />} />
+                        <Route path="/staff/editReceipt/:id" element={<AddReceipt />} />
                         <Route path="/staff/deleteReceipt/:id" element={<ReceiptDetails />} />
 
                         <Route path="/staff/getAllPatients" element={<PatientMasterStaff />} />
                         <Route path="/staff/getPatient/:id" element={<PatientDetailsStaff />} />
-                        {/* <Route path="/staff/addPatient" element={<AddPatientStaff />} /> */}
-                        {/*<Route path="/staff/editPatient/:id" element={<PatientDetailsStaff />} />
-                        <Route path="/staff/deletePatient/:id" element={<PatientDetailsStaff />} /> */}
+                        <Route path="/staff/addPatient" element={<AddPatient />} />
+                        <Route path="/staff/editPatient/:id" element={<AddPatient />} />
+                        <Route path="/staff/deletePatient/:id" element={<PatientDetailsStaff />} />
 
                         <Route path="/staff/getAllOPDs" element={<OPDMasterStaff />} />
                         <Route path="/staff/getOPD/:id" element={<OPDDetailsStaff />} />
+                        <Route path="/staff/editOPD/:id" element={<OPDDetailsStaff/>}/>
                       
                     </Route>
 

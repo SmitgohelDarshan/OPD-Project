@@ -71,8 +71,7 @@ const AddOPD = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/opds/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/opds/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -98,8 +97,7 @@ const AddOPD = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/opds/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/opds/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",

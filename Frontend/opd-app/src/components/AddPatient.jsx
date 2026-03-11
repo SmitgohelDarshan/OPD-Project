@@ -12,13 +12,18 @@ import {
   Building2, 
   Briefcase,
   Droplet,
-  Users
+  Users,
+  Mail
 } from 'lucide-react';
+import { useAuth } from '../contexts/useAuth';
 
 const AddPatient = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
   const{id}=useParams();
+  const {user}=useAuth();
+
+  console.log(user);
 
 
   // --- Form State ---
@@ -38,17 +43,49 @@ const AddPatient = () => {
     MobileNo: '',
     ReferredBy: '',
     Description: '',
-    UserID: 1, // Logged-in User
+    UserID: '', // Logged-in User
     EmergencyContactNo: ''
   });
 
-  if(id){
-        useEffect(()=>{
-          fetch('http://localhost:3000/api/patients/'+id), {credentials:'include'}
-          .then((res)=>res.json())
-          .then((json)=>setFormData(json[0]))
-        },[])
+  // --- EFFECT 1: Fetch Existing Patient (Edit Mode) ---
+  useEffect(() => {
+    if (id) {
+      fetch(`http://localhost:3000/api/patients/${id}`, { credentials: 'include' })
+        .then((res) => res.json())
+        .then((json) => {
+          console.log("Data from API:", json); // Check the keys here!
+          if (json) {
+            setFormData(json); 
+          }
+        })
+        .catch(err => console.error("Error fetching patient:", err));
+    }
+  }, [id]);
+
+  // --- EFFECT 2: Handle User ID and Staff Hospital ID ---
+  useEffect(() => {
+    if (user) {
+      // Always set the UserID
+      setFormData(prev => ({ ...prev, UserID: user.UserID }));
+
+      // If staff and registering NEW, fetch their HospitalID
+      if (user.Role === 'staff' && !id) {
+        fetch('http://localhost:3000/api/staffs/email', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        })
+        .then((res) => res.json())
+        .then((json) => {
+          if (json && json[0]) {
+            setFormData(prev => ({ ...prev, HospitalID: json[0].HospitalID }));
+          }
+        })
+        .catch(err => console.error("Error fetching staff hospital:", err));
       }
+    }
+  }, [user, id]);
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -64,68 +101,113 @@ const AddPatient = () => {
       .slice(0, 16);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (id) {
+  //     console.log(id);
+  //     try {
+  //       const { Created, Modified, PatientID, _id, ...updateData } = formData;
+  //       console.log("Submitting to MongoDB Schema:", updateData);
+  //       // Example API call:
+
+  //       const response = await fetch(
+  //         "http://localhost:3000/api/patients/update/" + id, {credentials:'include',
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(updateData),
+  //         },
+  //       );
+
+  //       const result = await response.json();
+  //       console.log(result);
+  //       if (response.status == 200 || response.status == 201) { // Note: PUT often returns 200
+  //         alert(`Patient edited successfully`);
+  //         navigate(`/${user.Role}/getPatient/${id}`); 
+  //       } else {
+  //         alert(`Error:${result.message}`);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error editing hospital:", error);
+  //       alert("Failed to save Patient. Please check schema constraints.");
+  //     }
+  //   } else {
+  //     try {
+  //       // setFormData({...formData,UserID:user.UserID})
+  //       const dataToSubmit = { 
+  //     ...formData, 
+  //     UserID: user.UserID 
+  //   };
+  //       console.log("Submitting to MongoDB Schema:", formData);
+  //       // Example API call:
+  //       const response = await fetch(
+  //         "http://localhost:3000/api/patients/register", {credentials:'include',
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(dataToSubmit),
+  //         },
+  //       );
+
+  //       const result = await response.json();
+  //       console.log(result);
+  //       if (response.status == 201) {
+  //         alert(`Hospital added with id ${result.PatientID}`);
+  //         navigate("/"+user.Role+"/getAllPatients");
+  //       } else {
+  //         alert(`Error:${result.message}`);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error saving Patient:", error);
+  //       alert("Failed to save Patient. Please check schema constraints.");
+  //     }
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      try {
-        const { Created, Modified, PatientID, _id, ...updateData } = formData;
-        console.log("Submitting to MongoDB Schema:", updateData);
-        // Example API call:
+    const apiUrl = id 
+      ? `http://localhost:3000/api/patients/update/${id}` 
+      : "http://localhost:3000/api/patients/register";
+    
+    const method = id ? "PUT" : "POST";
 
-        const response = await fetch(
-          "http://localhost:3000/api/patients/update/" + id, {credentials:'include'},
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-          },
-        );
+    try {
+      const { Created, Modified, PatientID, _id,__v, ...submitData } = formData;
+      
+      const response = await fetch(apiUrl, {
+        method: method,
+        credentials: 'include',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submitData),
+      });
 
-        const result = await response.json();
-        console.log(result);
-        if (response.status == 201) {
-          alert(`Patient edited with id ${result.PatientID}`);
-          navigate("/admin/getPatient/" + id);
-        } else {
-          alert(`Error:${result.message}`);
-        }
-      } catch (error) {
-        console.error("Error editing hospital:", error);
-        alert("Failed to save Patient. Please check schema constraints.");
+      const result = await response.json();
+      if (response.ok || response.status === 201) {
+        alert(`Patient ${id ? 'updated' : 'registered'} successfully!`);
+        // Use user.Role to navigate to the correct dashboard
+        navigate(`/${user.Role}/getAllPatients`);
+      } else {
+        alert(`Error: ${result.message}`);
       }
-    } else {
-      try {
-        console.log("Submitting to MongoDB Schema:", formData);
-        // Example API call:
-        const response = await fetch(
-          "http://localhost:3000/api/patients/register", {credentials:'include'},
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          },
-        );
-
-        const result = await response.json();
-        console.log(result);
-        if (response.status == 201) {
-          alert(`Hospital added with id ${result.PatientID}`);
-          navigate("/admin/getAllPatients");
-        } else {
-          alert(`Error:${result.message}`);
-        }
-      } catch (error) {
-        console.error("Error saving Patient:", error);
-        alert("Failed to save Patient. Please check schema constraints.");
-      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Failed to save patient.");
     }
   };
-  const handleCancel = () =>{ if(id){navigate('/admin/getPatient/'+id)}else{navigate('/admin/getAllPatients')}};
 
+  // const handleCancel = () =>{ if(id){navigate('/admin/getPatient/'+id)}else{navigate('/admin/getAllPatients')}};
+  const handleCancel = () => { 
+  const baseRoute = user.Role === 'admin' ? '/admin' : '/staff'; // Or whatever your staff base route is
+  if (id) {
+    navigate(`${baseRoute}/getPatient/${id}`);
+  } else {
+    navigate(`${baseRoute}/getAllPatients`);
+  }
+};
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>
@@ -245,7 +327,7 @@ const AddPatient = () => {
               <input 
                 type="text" 
                 name="PatientNo"
-                placeholder="Auto-generated if empty"
+                placeholder="Patient No"
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
                 value={formData.PatientNo}
                 onChange={handleChange}
@@ -375,6 +457,22 @@ const AddPatient = () => {
               </div>
             </div>
 
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Email <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input 
+                  type="text" 
+                  name="Email"
+                  required
+                  placeholder=""
+                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  value={formData.Email}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
             {/* Address */}
             <div className="col-span-1 lg:col-span-3">
               <label className="block text-sm font-semibold text-slate-700 mb-2">Full Address</label>
@@ -395,17 +493,27 @@ const AddPatient = () => {
 
             {/* Hospital ID */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Hospital <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Hospital ID <span className="text-red-500">*</span></label>
               <div className="relative">
                 <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                {user.Role=='staff' &&
                 <input 
-                  name="HospitalID"
+                  name="HospitalID"        
+                  disabled
+                  type='number'
+                  className="w-full pl-10 pr-4 py-2.5 cursor-not-allowed bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  value={formData.HospitalID}
+                  onChange={handleChange}
+                />}
+                {user.Role=='admin' &&
+                <input 
+                  name="HospitalID"        
                   required
-                  type='text'
+                  type='number'
                   className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
                   value={formData.HospitalID}
                   onChange={handleChange}
-                />
+                />}
               </div>
             </div>
 

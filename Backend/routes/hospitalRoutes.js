@@ -8,11 +8,12 @@ const validate = require("../middlewares/validate");
 
 const router = express.Router();
 
-router.post("/register", validate(registerSchema), registerHospital);
 
 router.get("/", getAllHospitals);
 
 router.get("/:id", getHospitalById);
+
+router.post("/register", validate(registerSchema), registerHospital);
 
 router.put("/update/:id", validate(registerSchema), updateHospital);
 

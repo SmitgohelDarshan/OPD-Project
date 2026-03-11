@@ -63,8 +63,7 @@ const AddSubTreatmentType = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/subtreatments/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/subtreatments/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -90,8 +89,7 @@ const AddSubTreatmentType = () => {
         const { Created, Modified, SubTreatmentTypeID, _id, ...addData } = formData;
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/subtreatments/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/subtreatments/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",

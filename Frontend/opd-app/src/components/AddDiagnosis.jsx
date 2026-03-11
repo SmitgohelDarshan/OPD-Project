@@ -64,8 +64,7 @@ const AddDiagnosis = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/diagnosistypes/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/diagnosistypes/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -92,8 +91,7 @@ const AddDiagnosis = () => {
         // Example API call:
         console.log(addData);
         const response = await fetch(
-          "http://localhost:3000/api/diagnosistypes/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/diagnosistypes/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",

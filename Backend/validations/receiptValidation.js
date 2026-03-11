@@ -2,7 +2,6 @@ const Joi=require("joi")
 
 const registerSchema=Joi.object({
     ReceiptID:Joi.number().positive(),
-    ReceiptNo:Joi.string().max(250),
     ReceiptDate:Joi.date().required(),
     OPDID:Joi.number().positive().required(),
     AmountPaid:Joi.number().positive().required(),
@@ -10,10 +9,7 @@ const registerSchema=Joi.object({
     UserID:Joi.number().positive().required(),
     PaymentModeID:Joi.number().positive().required(),
     ReferenceNo:Joi.string().min(0).max(250),
-    ReferenceDate:Joi.date(),
-    cancellationDateTime:Joi.date(),
-    cancellationByUserID:Joi.number().positive(),
-    cancellationRemarks:Joi.string().max(500)
+    ReferenceDate:Joi.date()
 })
 
 module.exports=registerSchema

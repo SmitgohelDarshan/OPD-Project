@@ -35,8 +35,9 @@ function PatientDetails() {
     if (window.confirm("Are you sure you want to delete this Patient record?")) {
       try {
         const req = await fetch(`http://localhost:3000/api/patients/delete/${id}`, {
-          method: 'DELETE'
-        }, {credentials:'include'});
+          method: 'DELETE',
+         credentials:'include'
+        });
         if (req.status === 200 || req.status === 201) {
           alert(`Patient record ${id} deleted successfully`);
           navigate('/admin/getAllPatients');

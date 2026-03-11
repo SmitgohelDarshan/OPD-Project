@@ -37,7 +37,8 @@ const DoctorDetails = () => {
         
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/doctors/delete/${id}`,{
-          method:'DELETE'
+          method:'DELETE',
+          credentials:'include'
         })
 
         

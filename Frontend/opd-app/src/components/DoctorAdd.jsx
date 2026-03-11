@@ -85,8 +85,7 @@ const DoctorAdd = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/doctors/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/doctors/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -112,8 +111,7 @@ const DoctorAdd = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/doctors/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/doctors/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",

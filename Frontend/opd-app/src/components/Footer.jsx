@@ -19,7 +19,7 @@ const Footer = () => {
             </div>
             <div>
               <h2 className="text-xl font-bold">OPD<span className="text-blue-400">+</span></h2>
-              <p className="text-gray-400 text-sm">OPD Management System</p>
+              <p className="text-gray-400 text-sm">Management System</p>
             </div>
           </div>
 

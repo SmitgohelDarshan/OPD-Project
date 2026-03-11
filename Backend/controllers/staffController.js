@@ -42,7 +42,6 @@ const getStaffById=async(req,res)=>{
 const getStaffByEmail=async(req,res)=>{
     try{
         const result=await Staff.find({Email:req.body.Email})
-
         return res.status(201).json(result)
     }
     catch(error){

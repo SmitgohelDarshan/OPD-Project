@@ -16,7 +16,7 @@ import {
   RefreshCw // For Follow-up icon
 } from 'lucide-react';
 import { useEffect } from 'react';
-import { useAuth } from '../contexts/useAuth';
+import { useAuth } from '../contexts/UseAuth';
 
 const OPDMasterStaff = () => {
   // --- Context for Sidebar Transition ---

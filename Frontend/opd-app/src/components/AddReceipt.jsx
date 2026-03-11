@@ -12,49 +12,55 @@ import {
   User, 
   IndianRupee 
 } from 'lucide-react';
+import { useAuth } from '../contexts/useAuth';
 
 const AddReceipt = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
-  const location = useLocation();
-  const{id}=useParams();
-  
-  // Determine if admin or staff route
-  const isAdmin = location.pathname.includes('/admin/');
-  const redirectPath = isAdmin ? '/admin/getAllReceipts' : '/staff/getAllReceipts';
+  const { id } = useParams();
+  const { user } = useAuth(); // Get logged in user info
 
   // --- Form State ---
   const [formData, setFormData] = useState({
-  ReceiptNo:'',
-  ReceiptDate: '',
-  OPDID: '',
-  AmountPaid: '',
-  Description: '',
-  UserID: '',
-  PaymentModeID: '',
-  ReferenceNo: '',
-  ReferenceDate: '',
-  cancellationDateTime: '',
-  CancellationByUserID: '',
-  CancellationRemarks: ''
+    ReceiptDate: '',
+    OPDID: '',
+    AmountPaid: '',
+    Description: '',
+    UserID: '',
+    PaymentModeID: '',
+    ReferenceNo: '',
+    ReferenceDate: '',
   });
 
-  // --- Handlers ---
+  // --- EFFECT 1: Fetch Existing Receipt (Edit Mode) ---
+  useEffect(() => {
+    if (id) {
+      fetch(`http://localhost:3000/api/receipts/${id}`, { credentials: 'include' })
+        .then((res) => res.json())
+        .then((json) => {
+          // If your API returns an array, use json[0]. If it returns an object, use json.
+          if (json && (json[0] || json.ReceiptNo)) {
+            setFormData(json[0] || json); 
+          }
+        })
+        .catch(err => console.error("Error fetching receipt:", err));
+    }
+  }, [id]);
+
+  // --- EFFECT 2: Auto-fill UserID ---
+  useEffect(() => {
+    if (user && !id) {
+      setFormData(prev => ({ ...prev, UserID: user.UserID }));
+    }
+  }, [user, id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  if(id){
-      useEffect(()=>{
-        fetch('http://localhost:3000/api/receipts/'+id), {credentials:'include'}
-        .then((res)=>res.json())
-        .then((json)=>setFormData(json[0]))
-      },[])
-    }
-
-    const formatDateTime = (dateString) => {
-    if (!dateString) return ""; // Handle undefined/null during initial load
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
     const dateObj = new Date(dateString);
     return new Date(dateObj.getTime() - (dateObj.getTimezoneOffset() * 60000))
       .toISOString()
@@ -63,66 +69,43 @@ const AddReceipt = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      try {
-        const { Created, Modified, ReceiptID, _id, ...updateData } = formData;
-        console.log("Submitting to MongoDB Schema:", updateData);
-        // Example API call:
+    const apiUrl = id 
+      ? `http://localhost:3000/api/receipts/update/${id}` 
+      : "http://localhost:3000/api/receipts/register";
+    
+    const method = id ? "PUT" : "POST";
 
-        const response = await fetch(
-          "http://localhost:3000/api/receipts/update/" + id, {credentials:'include'},
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-          },
-        );
+    try {
+      // Remove metadata fields before sending to prevent schema errors
+      const { Created, Modified, ReceiptID, _id, ReceiptNo, __v, ...submitData } = formData;
+      console.log(submitData)
+      const response = await fetch(apiUrl, {
+        method: method,
+        credentials: 'include',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submitData),
+      });
 
-        const result = await response.json();
-        console.log(result);
-        if (response.status == 201) {
-          alert(`OPD edited with id ${result.ReceiptID}`);
-          navigate("/admin/getReceipt/" + id);
-        } else {
-          alert(`Error:${result.message}`);
-        }
-      } catch (error) {
-        console.error("Error editing hospital:", error);
-        alert("Failed to save Receipt. Please check schema constraints.");
+      const result = await response.json();
+      if (response.ok || response.status === 201) {
+        alert(`Receipt ${id ? 'updated' : 'registered'} successfully!`);
+        navigate(`/${user.Role}/getAllReceipts`);
+      } else {
+        alert(`Error: ${result.message}`);
       }
-    } else {
-      try {
-        console.log("Submitting to MongoDB Schema:", formData);
-        // Example API call:
-        const response = await fetch(
-          "http://localhost:3000/api/receipts/register", {credentials:'include'},
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          },
-        );
-
-        const result = await response.json();
-        console.log(result);
-        if (response.status == 201) {
-          alert(`Hospital added with id ${result.ReceiptID}`);
-          navigate("/admin/getAllReceipts");
-        } else {
-          alert(`Error:${result.message}`);
-        }
-      } catch (error) {
-        console.error("Error saving Receipt:", error);
-        alert("Failed to save Receipt. Please check schema constraints.");
-      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Failed to save receipt.");
     }
   };
-  const handleCancel = () =>{ if(id){navigate('/admin/getReceipt/'+id)}else{navigate('/admin/getAllReceipts')}};
 
+  const handleCancel = () => {
+    if (id) {
+      navigate(`/${user.Role}/getReceipt/${id}`);
+    } else {
+      navigate(`/${user.Role}/getAllReceipts`);
+    }
+  };
 
   return (
     <div className={`min-h-screen bg-gray-50 text-slate-800 font-sans p-8 ${expanded ? "ml-64" : "ml-16"} transition-all duration-1000 animate-fade-in`}>
@@ -163,7 +146,7 @@ const AddReceipt = () => {
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-100 border border-gray-300 rounded-lg text-sm text-slate-500 outline-none cursor-not-allowed"
                   
                   value={formData.ReceiptNo}
-                  onChange={handleChange}
+                 
                   readOnly
                 />
               </div>

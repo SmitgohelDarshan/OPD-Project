@@ -8,7 +8,14 @@ const DoctorSchema = new mongoose.Schema({
   HospitalID: { type: Number, required: true, ref: 'Hospital' },
   Description: { type: String, maxLength: 250 },
   UserID: { type: Number, required: true },
-  Image:{type:String}
+  Image:{type:String},
+  StartTime:{type:Date},
+  SlotsPerDay:{type:Number,default:20},
+  AvgTimePerPatient:{type:Number, default:15},
+  AppointmentDate:{type:Date},
+  CurrentSlot:{type:Number, default:0},
+  Experience:{type:Number},
+  Rating:{type:Number,min:1,max:5}
 }, { timestamps: { createdAt: 'Created', updatedAt: 'Modified' } });
 
 DoctorSchema.pre('save',async function(){

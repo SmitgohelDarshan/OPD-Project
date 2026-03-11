@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAuth } from '../contexts/UseAuth';
+import { useAuth } from '../contexts/useAuth';
 
 const ReceiptMasterStaff = () => {
   // --- Context for Sidebar Transition ---

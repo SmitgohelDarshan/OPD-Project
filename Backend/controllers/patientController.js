@@ -116,6 +116,7 @@ const registerPatient=async(req,res)=>{
 
 
 const updatePatient=async(req,res)=>{
+    console.log(req.params.id)
     try{
         const result=await Patient.findOneAndUpdate({PatientID:req.params.id},req.body)
 

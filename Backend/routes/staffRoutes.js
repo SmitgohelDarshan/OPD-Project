@@ -8,9 +8,9 @@ const router=express.Router();
 
 router.post("/register",validate(registerSchema),registerStaff)
 
-router.get("/",authorize('admin'),getAllStaffs)
+router.post("/email",getStaffByEmail)
 
-router.get("/email",getStaffByEmail)
+router.get("/",authorize('admin'),getAllStaffs)
 
 router.get("/:id",getStaffById)
 

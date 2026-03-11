@@ -73,7 +73,7 @@ function PatientDetailsStaff() {
             </div>
             
             <div className="flex gap-4">
-              <Link to={`/admin/editPatient/${id}`}>
+              <Link to={`/staff/editPatient/${id}`}>
                 <button className="flex items-center gap-2 px-6 py-2.5 bg-white text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-50 transition-all shadow-lg">
                   <Edit3 className="w-4 h-4" /> EDIT
                 </button>

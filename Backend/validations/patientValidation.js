@@ -4,7 +4,7 @@ const registerSchema = Joi.object({
     PatientID: Joi.number().positive(),
     Email:Joi.string().required(),
     PatientName: Joi.string().max(250).required(),
-    PatientNo: Joi.number().positive().required(),
+    PatientNo: Joi.string().required(),
     RegistrationDateTime: Joi.date().required(),
     Age: Joi.number().positive().required(),
     BloodGroup: Joi.string().min(1).max(20).required(),
@@ -17,7 +17,7 @@ const registerSchema = Joi.object({
     PinCode: Joi.string().max(10).required(),
     MobileNo: Joi.string().length(10).required(),
     ReferredBy: Joi.string().max(250),
-    Description: Joi.string().max(250),
+    Description: Joi.string().max(250).min(0),
     UserID: Joi.number().positive().required(),
     EmergencyContactNo: Joi.string().max(20).required()
 })

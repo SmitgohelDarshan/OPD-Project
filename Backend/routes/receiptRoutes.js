@@ -9,9 +9,7 @@ router.get('/',getAllReceipts)
 
 router.post('/bystaff', getAllReceiptsBystaff)
 
-
 router.post('/register',validate(registerSchema),registerReceipt)
-
 
 
 router.get('/:id',getReceiptById)

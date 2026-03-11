@@ -53,8 +53,7 @@ const AddTreatmentType = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/treatments/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/treatments/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -80,8 +79,7 @@ const AddTreatmentType = () => {
         const { Created, Modified, TreatmentTypeID, _id, ...addData } = formData;
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/treatments/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/treatments/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",

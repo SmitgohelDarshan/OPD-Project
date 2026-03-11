@@ -73,11 +73,12 @@ function OPDDetailsStaff() {
             </div>
             
             <div className="flex gap-4">
-              <Link to={`/admin/editPatient/${id}`}>
+              <Link to={`/staff/editOPD/${id}`}>
                 <button className="flex items-center gap-2 px-6 py-2.5 bg-white text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-50 transition-all shadow-lg">
                   <Edit3 className="w-4 h-4" /> EDIT
                 </button>
               </Link>
+
               <button 
                 onClick={() => handleDelete(id)}
                 className="flex items-center gap-2 px-6 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition-all shadow-lg"

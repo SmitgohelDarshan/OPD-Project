@@ -2,6 +2,8 @@ const Receipt = require("../models/Receipt")
 const Staff=require("../models/Staff")
 
 const registerReceipt=async(req,res)=>{
+
+    console.log(req.body);
     try{
         const result=await Receipt(req.body)
         
@@ -43,6 +45,7 @@ const getAllReceipts=async(req,res)=>{
 
 const getAllReceiptsBystaff=async(req,res)=>{
     const email=req.body.Email
+    console.log(email)
     // console.log("get All receipts by staff called")
 
     try {

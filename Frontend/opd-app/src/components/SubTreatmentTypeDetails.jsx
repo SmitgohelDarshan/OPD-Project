@@ -54,8 +54,9 @@ const SubTreatmentTypeDetails = () => {
         // TODO: Replace with actual API call
         // await fetch(`/api/opds/${id}`, { method: 'DELETE' });
         const req=await fetch(`http://localhost:3000/api/subtreatments/delete/${id}`,{
-          method:'DELETE'
-        }, {credentials:'include'})
+          method:'DELETE',
+        credentials:'include'
+      })
 
         if (!req==201) {
         throw new Error('Failed to delete the record from the server');

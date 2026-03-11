@@ -15,11 +15,17 @@ import {
   AlignLeft,
   User
 } from 'lucide-react';
+import { useAuth } from '../contexts/UseAuth';
 
 const AddHospital = () => {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
   const{id}=useParams();
+
+  const {user}=useAuth()
+
+  console.log(user)
+
 
 
   // --- Form State aligned with HospitalSchema ---
@@ -40,6 +46,11 @@ const AddHospital = () => {
         IsRegistrationFeeEnableInOPD:'',
         ImageURL:''
   });
+
+
+  useEffect(()=>{
+    setFormData({...formData, UserID:user.UserID})
+  },[user])
 
   if(id){
       useEffect(()=>{
@@ -89,8 +100,7 @@ const AddHospital = () => {
         // Example API call:
 
         const response = await fetch(
-          "http://localhost:3000/api/hospitals/update/" + id, {credentials:'include'},
-          {
+          "http://localhost:3000/api/hospitals/update/" + id, {credentials:'include',
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -116,14 +126,13 @@ const AddHospital = () => {
         console.log("Submitting to MongoDB Schema:", formData);
         // Example API call:
         const response = await fetch(
-          "http://localhost:3000/api/hospitals/register", {credentials:'include'},
-          {
+          "http://localhost:3000/api/hospitals/register", {credentials:'include',
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(formData),
-          },
+          }
         );
 
         const result = await response.json();

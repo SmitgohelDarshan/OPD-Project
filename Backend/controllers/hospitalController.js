@@ -1,6 +1,7 @@
 const Hospital = require("../models/Hospital")
 
 const registerHospital=async(req,res)=>{
+    console.log("Register hospital called.")
     try{
         const newHospital=await Hospital(req.body)
 
@@ -15,6 +16,7 @@ const registerHospital=async(req,res)=>{
 }
 
 const getHospitalById=async(req,res)=>{
+    // console.log("Get hospital by id is called")
     try {
         const hospital = await Hospital.find({HospitalID:req.params.id})
 

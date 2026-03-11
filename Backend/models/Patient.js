@@ -8,7 +8,7 @@ const PatientSchema = new mongoose.Schema({
   PatientID: { type: Number },
   Email:{type:String, required:true},
   PatientName: { type: String, maxLength: 250 },
-  PatientNo: { type: String },
+  PatientNo: { type: String, required:true },
   RegistrationDateTime: { type: Date, required: true },
   Age: { type: Number },
   BloodGroup: { type: String, maxLength: 20 },

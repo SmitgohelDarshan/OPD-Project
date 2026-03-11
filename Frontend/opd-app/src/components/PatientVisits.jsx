@@ -10,7 +10,8 @@ import {
   ChevronRight, 
   Stethoscope,
   Activity,
-  Clock
+  Clock,
+  Hospital
 } from 'lucide-react';
 import { useAuth } from '../contexts/useAuth';
 
@@ -197,11 +198,11 @@ const PatientVisits = () => {
                     <div className="p-3 bg-white rounded-full shadow-sm mb-2 text-blue-600">
                         <Calendar className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-800">{visit.OPDDateTime.split(',')[0]}</h3>
-                    <p className="text-sm text-slate-500">{visit.OPDDateTime.split(',')[1]}</p>
-                    {/* <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-slate-400">
-                        <Clock className="w-3 h-3" /> {visit.time}
-                    </span> */}
+                    <h3 className="text-lg font-bold text-slate-800">{visit.OPDDateTime.split('T')[0]}</h3>
+                    
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-slate-400">
+                        <Clock className="w-3 h-3" /> {visit.OPDDateTime.split('T')[1].split('.')[0]}
+                    </span>
                 </div>
 
                 {/* Middle: Visit Details */}
@@ -217,22 +218,29 @@ const PatientVisits = () => {
                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
                             visit.IsFollowUpCase === true ? 'bg-green-50 text-green-700 border-green-100' : 'bg-orange-50 text-orange-700 border-orange-100'
                         }`}>
-                            {visit.IsFollowUpCase}
+                            {visit.IsFollowUpCase===true?'Follow Up Case':'New Case'}
                         </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
-                        <div className="flex items-start gap-2">
-                            <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                        <div >
+                            <div className='flex gap-2'>
+                            <Hospital className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                             <span className="text-slate-600">{visit.HospitalName}</span>
+                            </div>
+                            <div className='flex mt-1 gap-2'>
+                                <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                                <span className="text-slate-600">{visit.HospitalLocation}</span>
+                            </div>
                         </div>
-                        {/* <div className="flex items-start gap-2">
+                        
+                        <div className="flex items-start gap-2">
                             <Activity className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                             <div>
-                                <span className="font-semibold text-slate-700">Diagnosis: </span>
-                                <span className="text-slate-600">{visit.diagnosis}</span>
+                                <span className="font-semibold text-slate-700">Description: </span>
+                                <span className="text-slate-600">{visit.Description}</span>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                     
                     {/* <div className="text-sm text-slate-500 italic bg-gray-50 p-3 rounded-lg border border-gray-100">

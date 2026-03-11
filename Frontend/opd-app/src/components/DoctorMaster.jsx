@@ -139,67 +139,63 @@ const DoctorMaster = () => {
                 <th className="px-6 py-4">Doctor Name</th>
                 <th className="px-6 py-4">Specialty</th>
                 <th className="px-6 py-4">Hospital Name</th>
+                <th className="px-6 py-4">Exp/Rating</th>
                 <th className="px-6 py-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredDoctors.length > 0 ? (
                 filteredDoctors.map((doctor) => (
-                  <tr key={doctor.DoctorID} className="hover:bg-blue-50/30 transition-colors group">
-                    
-                    {/* ID Column */}
-                    <td className="px-6 py-4 font-mono text-xs text-slate-400">
-                      #{doctor.DoctorID}
-                    </td>
+  <tr key={doctor.DoctorID} className="hover:bg-blue-50/30 transition-colors group">
+    
+    {/* ID */}
+    <td className="px-6 py-4 font-mono text-xs text-slate-400">
+      #{doctor.DoctorID}
+    </td>
 
-                    {/* Doctor Name Column */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={doctor.Image} 
-                          alt={doctor.DoctorName} 
-                          className="w-10 h-10 rounded-full object-cover border border-blue-100"
-                        />
-                        <div>
-                          <div className="font-medium text-slate-900">{doctor.DoctorName}</div>
-                          <div className="text-xs text-slate-400 flex items-center gap-1">
-                             <Mail className="w-3 h-3" />
-                             {doctor.Email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
+    {/* Doctor Info */}
+    <td className="px-6 py-4">
+      <div className="flex items-center gap-3">
+        <img src={doctor.Image} className="w-10 h-10 rounded-full object-cover border" />
+        <div>
+          <div className="font-medium text-slate-900">{doctor.DoctorName}</div>
+          <div className="text-xs text-slate-400">ID: {doctor.UserID}</div>
+        </div>
+      </div>
+    </td>
 
-                    {/* Specialty Column */}
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
-                        <Stethoscope className="w-3 h-3" />
-                        {doctor.Specialty}
-                      </span>
-                    </td>
+    {/* Specialty (Pulled from Description via project) */}
+    <td className="px-6 py-4">
+      <span className="px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+        {doctor.Specialty}
+      </span>
+    </td>
 
-                    {/* Hospital Name Column */}
-                    <td className="px-6 py-4">
-                       <div className="flex items-center gap-2 text-slate-600">
-                         <Building2 className="w-4 h-4 text-slate-400" />
-                         {doctor.HospitalName}
-                       </div>
-                    </td>
+    {/* Hospital Name (Now available via $lookup) */}
+    <td className="px-6 py-4">
+      <div className="flex items-center gap-2 text-slate-600">
+        <Building2 className="w-4 h-4 text-slate-400" />
+        {doctor.HospitalName}
+      </div>
+    </td>
 
-                    {/* Actions Column */}
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        
-                        {/* VIEW ACTION */}
-                        <Link to={`/admin/getDoctor/${doctor.DoctorID}`}>
-                          <button className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded transition-all duration-300 hover:scale-110 active:scale-95" title="View Details">
-                            <Eye className="w-4 h-4" />
-                          </button>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+    {/* Professional Stats */}
+    <td className="px-6 py-4">
+      <div className="text-xs font-semibold text-slate-500">
+        {doctor.Experience}Y Exp | <span className="text-amber-500">★ {doctor.Rating}</span>
+      </div>
+    </td>
+
+    {/* Actions */}
+    <td className="px-6 py-4 text-right">
+      <Link to={`/admin/getDoctor/${doctor.DoctorID}`}>
+        <button className="p-1.5 hover:bg-slate-100 rounded">
+          <Eye className="w-4 h-4" />
+        </button>
+      </Link>
+    </td>
+  </tr>
+              ))
               ) : (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-slate-400">
