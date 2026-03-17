@@ -1,8 +1,8 @@
 const express=require('express')
-const { bookNextAvailable } = require('../controllers/appointmentController')
+const { bookAppointment } = require('../controllers/appointmentController')
 
 const router=express.Router()
 
-router.get('/book',bookNextAvailable)
+router.post('/book',bookAppointment)
 
 module.exports=router

@@ -51,7 +51,7 @@ const AddStaff = () => {
     e.preventDefault();
     if (id) {
       try {
-        const { Created, Modified, StaffID, _id, ...updateData } = formData;
+        const { Created, Modified, StaffID, _id, Password,__v, ...updateData } = formData;
         const response = await fetch(
           "http://localhost:3000/api/staffs/update/" + id, {
             credentials: 'include',
@@ -68,28 +68,47 @@ const AddStaff = () => {
         } else {
           alert(`Error: ${result.message}`);
         }
+
+        
+
       } catch (error) {
         console.error("Error editing staff:", error);
         alert("Failed to save Staff.");
       }
     } else {
       try {
+
+        const { Created, Modified, StaffID, _id, Password, ...updateData } = formData;
         const response = await fetch(
           "http://localhost:3000/api/staffs/register", {
             credentials: 'include',
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updateData),
           },
         );
 
         const result = await response.json();
-        if (response.status === 201) {
+        
+
+        const userData={Email:formData.Email, Password: formData.Password, Role: 'staff'};
+        const response2=await fetch(
+          "http://localhost:3000/api/signup",{
+            credentials:'include',
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify(userData)
+          }
+        )
+
+        const result2 = await response2.json();
+        if (response2.status === 201 || response2.status === 200 && (response.status === 201)) {
           alert(`Staff added with id ${result.StaffID}`);
           navigate("/admin/getAllStaffs");
         } else {
-          alert(`Error: ${result.message}`);
+          alert(`Error: ${result.message}+ ${result2.message}`);
         }
+
       } catch (error) {
         console.error("Error saving Staff:", error);
         alert("Failed to save Staff.");
@@ -164,8 +183,10 @@ const AddStaff = () => {
                   type="email" 
                   name="Email"
                   required
+                  disabled={id && true}
                   placeholder="staff@hospital.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  
+                  className={!id ? "w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all":"w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all cursor-not-allowed" }
                   value={formData.Email}
                   onChange={handleChange}
                 />
@@ -181,8 +202,9 @@ const AddStaff = () => {
                   type="password" 
                   name="Password"
                   required={!id} // Password required for new registration
+                  disabled={id && true}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  className={!id ? "w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all":"w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all cursor-not-allowed" }
                   value={formData.Password}
                   onChange={handleChange}
                 />

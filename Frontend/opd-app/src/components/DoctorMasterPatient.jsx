@@ -12,12 +12,52 @@ import {
   ThumbsUp,
   Award
 } from 'lucide-react';
+import { useAuth } from '../contexts/useAuth';
 
 const DoctorMasterPatient = () => {
   const { expanded } = useContext(SidebarContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('All');
+  const[loading,setLoading]=useState(true)
   const [doctors, setDoctors] = useState([]);
+  const {user}=useAuth()
+  const [appointmentData, setAppointmentData]=useState({
+      DoctorID:1,
+      AppointmentDate:new Date().toISOString(),
+      Status:'Pending'
+    })
+
+  const [formData,setFormData]=useState(null)
+
+   useEffect(() => {
+      const fetchPatient = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/api/patients/email`, { 
+            credentials: 'include',
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(user)
+          });
+          const json = await response.json();
+          // Assuming your API returns an array [staffObject]
+
+          setFormData(Array.isArray(json) ? json[0] : json);
+
+        } catch (error) {
+          console.error("Error fetching staff:", error);
+          alert("Failed to load staff details.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      if (user?.Email)fetchPatient();
+    }, [user]);
+
+  useEffect(()=>{
+    if(formData){
+    setAppointmentData({...appointmentData, PatientID:formData.PatientID})
+    }
+  },[formData])
 
   useEffect(() => {
     const fetchFromBack = async () => {
@@ -31,6 +71,29 @@ const DoctorMasterPatient = () => {
     };
     fetchFromBack();
   }, []);
+
+  const bookAppointment=async(selectedDoctor)=>{
+    try{
+    const finalPayload = {
+        ...appointmentData,
+        DoctorID: selectedDoctor.DoctorID,
+        HospitalID: selectedDoctor.HospitalID,
+        AppointmentDate: new Date().toISOString()
+      };
+    const fetchedData=await fetch('http://localhost:3000/api/appointments/book',{
+      credentials:'include',
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(finalPayload)
+    })
+
+    const jsonData=await fetchedData.json()
+    alert("Your appointment booked successfully!")
+  }
+  catch(error){
+    console.error("Error fetching doctors:", error);
+  }
+  }
 
   const specialties = ["All", "Cardiologist", "Dermatologist", "Pediatrician", "Gynecologist", "Orthopedic"];
 
@@ -142,7 +205,7 @@ const DoctorMasterPatient = () => {
               </div>
               
               <button 
-                onClick={() => console.log(`Booking ID: ${doctor.DoctorID}`)}
+                onClick={() => {bookAppointment(doctor)}}
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-sm transition-all"
               >
                 Book Now

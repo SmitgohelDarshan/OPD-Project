@@ -4,7 +4,8 @@ import {
   User, 
   ChevronDown, 
   Stethoscope, 
-  HeartPulse
+  HeartPulse,
+  IdCard
 } from 'lucide-react';
 import { SidebarContext } from '../contexts/Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,6 +18,8 @@ const Navbar = () => {
 
   // Example user data - usually comes from an Auth Context
   const {user,setUser}=useAuth()
+
+  console.log("Smit",user)
 
   const handleLogout =async () => {
     
@@ -61,6 +64,8 @@ const Navbar = () => {
             <span className="text-sm font-semibold text-slate-700">{user.name}</span>
             <span className="text-[11px] text-slate-500 font-medium">{user.role}</span>
           </div>
+
+         
           
           <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
             <User className="w-5 h-5 text-blue-600" />
@@ -81,9 +86,16 @@ const Navbar = () => {
             <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-xl shadow-xl z-20 overflow-hidden py-1 animate-scale-in">
               <div className="px-4 py-3 border-b border-gray-50 md:hidden">
                 <p className="text-sm font-bold text-slate-800">{user.name}</p>
-                <p className="text-xs text-slate-500">{user.role}</p>
+                <p className="text-xs text-slate-500">{user.Role}</p>
               </div>
-              
+               {(user.Role == 'staff' || user.Role == 'patient') && 
+                <button 
+                  onClick={() => navigate(`/`+user.Role+`/info`)}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-blue-600 hover:bg-red-50 transition-colors font-medium"
+                >
+                  <IdCard className="w-6 h-6" />
+                 Profile
+                </button>}
               
               <button 
                 onClick={handleLogout}

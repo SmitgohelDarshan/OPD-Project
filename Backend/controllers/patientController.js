@@ -88,7 +88,7 @@ const getPatientById=async(req,res)=>{
 }
 
 const getPatientByEmail=async(req,res)=>{
-    console.log(req.body)
+    console.log("hii from email")
     try{
         const result=await Patient.find({Email:req.body.Email})
 

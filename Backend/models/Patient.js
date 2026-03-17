@@ -15,7 +15,7 @@ const PatientSchema = new mongoose.Schema({
   Gender: { type: String, required: true, maxLength: 10 },
   Occupation: { type: String, maxLength: 100 },
   Address: { type: String, maxLength: 250 },
-  HospitalID: { type: Number, required: true, ref: 'Hospital' },
+  HospitalID: [{ type: Number, required: true, ref: 'Hospital' }],
   StateID: { type: Number },
   CityID: { type: Number },
   PinCode: { type: String, maxLength: 10 },

@@ -61,6 +61,10 @@ import PatientMasterStaff from "./components/PatientMasterStaff";
 import PatientDetailsStaff from "./components/PatientDetailsStaff";
 import OPDMasterStaff from "./components/OPDMasterStaff";
 import OPDDetailsStaff from "./components/OPDDetailsStaff";
+import PatientInfo from "./components/PatientInfo";
+import EditPatient from "./components/EditPatient";
+import EditStaff from "./components/EditStaff";
+import StaffInfo from "./components/StaffInfo";
 
 function App() {
 
@@ -201,6 +205,8 @@ function App() {
                         <Route path="/staff/addPatient" element={<AddPatient />} />
                         <Route path="/staff/editPatient/:id" element={<AddPatient />} />
                         <Route path="/staff/deletePatient/:id" element={<PatientDetailsStaff />} />
+                        <Route path="/staff/info" element={<StaffInfo/>}/>
+                        <Route path="/staff/edit" element={<EditStaff/>}/>
 
                         <Route path="/staff/getAllOPDs" element={<OPDMasterStaff />} />
                         <Route path="/staff/getOPD/:id" element={<OPDDetailsStaff />} />
@@ -216,7 +222,8 @@ function App() {
                           <Route path="/patient/dashboard" element={<DashboardPatient/>}/>
                           <Route path="/patient/bookAppointment" element={<DoctorMasterPatient/>} />
                           <Route path="/patient/getAllVisits" element={<PatientVisits/>}/>
-                    
+                          <Route path="/patient/info" element={<PatientInfo/>}/>
+                          <Route path="/patient/edit" element={<EditPatient/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

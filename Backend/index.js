@@ -60,7 +60,7 @@ app.use('/api/treatments',treatmentTypesRoutes)
 
 app.use('/api/staffs',staffRoutes)
 
-app.use('api/appointments',appointmentRoutes)
+app.use('/api/appointments',appointmentRoutes)
 
 const PORT=process.env.PORT
 
